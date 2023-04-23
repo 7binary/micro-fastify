@@ -1,0 +1,17 @@
+{
+  "name": "micro-fastify",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "k:del-ing": "kubectl delete ing --ignore-not-found=true ingress-service",
+    "k:del-secrets": "kubectl delete secret --ignore-not-found=true jwt-secret",
+    "k:secrets": "kubectl create secret generic jwt-secret --from-literal=JWT_SECRET=Key123",
+    "dev": "yarn k:del-ing && yarn k:del-secrets && yarn k:secrets && skaffold dev",
+    "dev:auth": "yarn --cwd auth dev",
+    "dev:client": "yarn --cwd client dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

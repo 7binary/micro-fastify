@@ -1,0 +1,7 @@
+.env
+.DS_Store
+.idea
+.nyc_output
+
+build
+node_modules

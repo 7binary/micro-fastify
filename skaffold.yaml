@@ -1,0 +1,33 @@
+apiVersion: skaffold/v4beta2
+kind: Config
+metadata:
+  name: micro-fastify
+
+manifests:
+  rawYaml:
+    - infra/k8s/*
+
+build:
+  local:
+    push: false
+  artifacts:
+    - image: zineof/f-auth
+      context: auth
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+    - image: zineof/f-client
+      context: client
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+          - src: 'src/**/*.tsx'
+            dest: .
+          - src: 'src/**/*.css'
+            dest: .

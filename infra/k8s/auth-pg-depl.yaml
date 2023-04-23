@@ -1,0 +1,61 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-pg-depl
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: auth-pg
+  template:
+    metadata:
+      labels:
+        app: auth-pg
+    spec:
+      containers:
+        - name: auth-pg
+          image: postgres
+          env:
+            - name: POSTGRES_DB
+              value: 'db'
+            - name: POSTGRES_USER
+              value: 'postgres'
+            - name: POSTGRES_PASSWORD
+              value: 'postgres'
+          volumeMounts:
+            - name: auth-pg-pvc
+              readOnly: false
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: auth-pg-pvc
+          persistentVolumeClaim:
+            claimName: auth-pg-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-pg-srv
+  labels:
+    app: auth-pg
+spec:
+  selector:
+    app: auth-pg
+  ports:
+    - port: 5432
+      targetPort: 5432
+      protocol: TCP
+      name: db
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: auth-pg-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100M
