@@ -12,12 +12,27 @@ import { prismaPlugin } from './plugins/prisma.plugin';
 export const createServer = (): FastifyInstance => {
   const fastify = Fastify({
     trustProxy: true,
-    logger: envToLogger[env.NODE_ENV] ?? true,
     ajv: {
       customOptions: { allErrors: true },
       plugins: [require('ajv-errors')],
     },
+    logger: env.NODE_ENV === 'production' ? true : env.NODE_ENV === 'test' ? false : {
+      transport: {
+        target: 'pino-pretty',
+        options: {
+          translateTime: 'HH:MM:ss Z',
+          ignore: 'reqId,req.hostname,req.remoteAddress,req.remotePort',
+        },
+      },
+    },
   }).withTypeProvider<TypeBoxTypeProvider>();
+
+  if (env.NODE_ENV === 'development') {
+    fastify.addHook('preHandler', function (req, reply, next) {
+      req.body && req.log.info({ body: req.body }, 'parsed body');
+      next();
+    });
+  }
 
   fastify.register(errorHandlerPlugin, { withStack: env.NODE_ENV === 'test', withLog: true });
   fastify.register(authJwtPlugin, { secret: env.JWT_SECRET });
@@ -29,18 +44,4 @@ export const createServer = (): FastifyInstance => {
   });
 
   return fastify;
-};
-
-const envToLogger = {
-  development: {
-    transport: {
-      target: 'pino-pretty',
-      options: {
-        translateTime: 'HH:MM:ss Z',
-        ignore: 'reqId,req.hostname,req.remoteAddress,req.remotePort',
-      },
-    },
-  },
-  production: true,
-  test: false,
 };

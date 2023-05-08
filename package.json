@@ -7,7 +7,9 @@
     "k:del-ing": "kubectl delete ing --ignore-not-found=true ingress-service",
     "k:del-secrets": "kubectl delete secret --ignore-not-found=true jwt-secret",
     "k:secrets": "kubectl create secret generic jwt-secret --from-literal=JWT_SECRET=Key123",
-    "dev": "yarn k:del-ing && yarn k:del-secrets && yarn k:secrets && skaffold dev",
+    "skaffold:prep": "yarn k:del-ing && yarn k:del-secrets && yarn k:secrets",
+    "skaffold:run": "skaffold dev --cleanup=false",
+    "dev": "yarn skaffold:prep && yarn skaffold:run",
     "dev:auth": "yarn --cwd auth dev",
     "dev:client": "yarn --cwd client dev"
   },

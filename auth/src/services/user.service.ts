@@ -65,7 +65,7 @@ export class UserService {
     const userByEmail = await this.findOneByEmail(email);
 
     if (userByEmail) {
-      throw new ValidationError('Email is already registered');
+      throw new ValidationError('E-mail is already registered');
     }
 
     const { salt, passhash } = await HashService.generatePasshash(password);

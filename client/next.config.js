@@ -1,6 +1,10 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+module.exports = {
   reactStrictMode: true,
-}
+  webpack: (config) => {
+    config.watchOptions.poll = 1000;
+    config.watchOptions.aggregateTimeout = 1000;
+    config.watchOptions.ignored = /node_modules/;
 
-module.exports = nextConfig
+    return config;
+  },
+};
