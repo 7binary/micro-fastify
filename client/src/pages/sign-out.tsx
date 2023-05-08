@@ -1,29 +1,36 @@
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 import { useEffect } from 'react';
 
-import { GuestLayout } from '@/layouts/GuestLayout';
 import { useActions } from '@/store';
 import { authHttp } from '@/network';
 import { Loader } from '@/ui/Loader';
+import { LoggedLayout } from '@/layouts/LoggedLayout';
 
-export default function SignOutPage() {
-  const { resetAuth, setAppLoaded } = useActions();
+const SignOutPage = () => {
+  const { resetAuth } = useActions();
   const router = useRouter();
 
   useEffect(() => {
     (async () => {
-      await authHttp.logout();
+      authHttp.logout();
       resetAuth();
       await router.replace('/');
-      setAppLoaded();
     })();
   }, []);
 
   return (
-    <GuestLayout title="Sign out">
-      <div className="flex justify-center items-center py-10">
-        <Loader />
-      </div>
-    </GuestLayout>
+    <>
+      <Head>
+        <title>Sign out | MicroFastify</title>
+      </Head>
+      <LoggedLayout>
+        <div className="flex justify-center items-center py-10">
+          <Loader />
+        </div>
+      </LoggedLayout>
+    </>
   );
-}
+};
+
+export default SignOutPage;

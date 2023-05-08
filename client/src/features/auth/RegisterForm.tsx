@@ -1,6 +1,5 @@
 import { useForm } from 'react-hook-form';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 import { useActions } from '@/store';
@@ -11,7 +10,6 @@ import { OutlinedButton } from '@/ui/buttons/OutlinedButton';
 import { ErrorMessage } from '@/ui/errors/ErrorMessage';
 
 export const RegisterForm = () => {
-  const router = useRouter();
   const { setAuthResponse } = useActions();
   const {
     handleSubmit,
@@ -25,7 +23,6 @@ export const RegisterForm = () => {
     try {
       const authResponse = await authHttp.register(data);
       await setAuthResponse(authResponse);
-      await router.push('/dashboard');
     } catch (err: any) {
       setErrorMessage(networkErrorHandler(err, setError));
     }
@@ -50,7 +47,7 @@ export const RegisterForm = () => {
       </div>
       <ErrorMessage>{errorMessage}</ErrorMessage>
       <div className="mt-4 text-center">
-        <PrimaryButton className="w-full" type="submit" onClick={submit} disabled={isSubmitting}>
+        <PrimaryButton className="w-full" type="submit" onClick={submit} loading={isSubmitting}>
           Sign up
         </PrimaryButton>
         <a href="#" className="mt-2 inline-block">Forgot password?</a>

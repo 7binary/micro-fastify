@@ -29,10 +29,11 @@ const PersistGateSSR = ({ children }: PropsWithChildren<{}>) => {
 };
 
 export const AuthProvider = ({ children }: PropsWithChildren<{}>) => {
-  const { registerHttpRetry, loadUser } = useActions();
+  const { registerHttpRetry, loadUser, setAppLoaded } = useActions();
   const user = useSelector(selectUser);
 
   useEffect(() => {
+    setAppLoaded();
     registerHttpRetry();
 
     if (user) {

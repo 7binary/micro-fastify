@@ -46,7 +46,7 @@ export class UserService {
 
   async login(dto: LoginDtoType): Promise<User> {
     const user = await this.findOneByEmail(dto.email);
-    const invalidError = 'Invalid login or password';
+    const invalidError = 'Invalid email or password';
 
     if (!user || !user.passwordSalt || !user.passwordHash) {
       throw new ValidationError(invalidError);

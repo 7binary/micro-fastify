@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 
 import { authHttp, networkErrorHandler } from '@/network';
@@ -11,7 +10,6 @@ import { OutlinedButton } from '@/ui/buttons/OutlinedButton';
 import { ErrorMessage } from '@/ui/errors/ErrorMessage';
 
 export const LoginForm = () => {
-  const router = useRouter();
   const { setAuthResponse } = useActions();
   const {
     handleSubmit,
@@ -24,8 +22,7 @@ export const LoginForm = () => {
   const submit = handleSubmit(async (data) => {
     try {
       const authResponse = await authHttp.login(data);
-      await setAuthResponse(authResponse);
-      await router.push('/dashboard');
+      setAuthResponse(authResponse);
     } catch (err: any) {
       setErrorMessage(networkErrorHandler(err, setError));
     }
@@ -50,7 +47,7 @@ export const LoginForm = () => {
       </div>
       <ErrorMessage>{errorMessage}</ErrorMessage>
       <div className="mt-4 text-center">
-        <PrimaryButton className="w-full" type="submit" onClick={submit} disabled={isSubmitting}>
+        <PrimaryButton className="w-full" type="submit" onClick={submit} loading={isSubmitting}>
           Sign in
         </PrimaryButton>
         <a href="#" className="mt-2 inline-block">Forgot password?</a>

@@ -1,10 +1,18 @@
-import { GuestLayout } from '@/layouts/GuestLayout';
+import Head from 'next/head';
 import { LoginForm } from '@/features/auth/LoginForm';
+import { GuestLayout } from '@/layouts/GuestLayout';
 
-export default function SignInPage() {
+const HomePage = () => {
   return (
-    <GuestLayout title="Sign in to your account">
-      <LoginForm />
-    </GuestLayout>
+    <>
+      <Head>
+        <title>MicroFastify</title>
+      </Head>
+      <GuestLayout title="Sign in to your account">
+        <LoginForm />
+      </GuestLayout>
+    </>
   );
-}
+};
+
+export default HomePage;

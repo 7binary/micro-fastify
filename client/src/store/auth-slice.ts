@@ -117,9 +117,6 @@ export const authActions = { ...slice.actions, registerHttpRetry, loadUser };
 
 // EXPORT SELECTORS
 const selectSelf = (rootState: {auth: AuthState}) => rootState.auth;
-export const selectUser = createSelector(
-  selectSelf,
-  state => state.appIsLoaded ? state.user : null,
-);
+export const selectUser = createSelector(selectSelf, state => state.user);
 export const selectToken = createSelector(selectSelf, state => state.token);
 export const selectAppIsLoaded = createSelector(selectSelf, state => state.appIsLoaded);

@@ -1,10 +1,18 @@
-import { GuestLayout } from '@/layouts/GuestLayout';
 import { RegisterForm } from '@/features/auth/RegisterForm';
+import { GuestLayout } from '@/layouts/GuestLayout';
+import Head from 'next/head';
 
-export default function SignUpPage() {
+const SignUpPage = () => {
   return (
-    <GuestLayout title="Sign up right now!">
-      <RegisterForm />
-    </GuestLayout>
+    <>
+      <Head>
+        <title>Sign up | MicroFastify</title>
+      </Head>
+      <GuestLayout title="Sign up right now!">
+        <RegisterForm />
+      </GuestLayout>
+    </>
   );
-}
+};
+
+export default SignUpPage;

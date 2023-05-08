@@ -1,17 +1,19 @@
 import { PropsWithChildren } from 'react';
 import { useRouter } from 'next/router';
-import { selectUser, useSelector } from '@/store';
+import { selectAppIsLoaded, selectUser, useSelector } from '@/store';
 
-interface Props {
-  title?: string;
-}
-
-export const GuestLayout = ({ children, title }: PropsWithChildren<Props>) => {
+export const LoggedLayout = ({ children }: PropsWithChildren<{}>) => {
   const router = useRouter();
   const user = useSelector(selectUser);
+  const appIsLoaded = useSelector(selectAppIsLoaded);
 
-  if (user) {
-    router.replace('/dashboard');
+  if (!appIsLoaded) {
+    return null;
+  }
+
+  if (!user) {
+    router.replace('/');
+    return null;
   }
 
   return (
@@ -28,13 +30,10 @@ export const GuestLayout = ({ children, title }: PropsWithChildren<Props>) => {
                       <img
                         className="mx-auto w-48"
                         src="https://tecdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/lotus.webp"
-                        alt="logo"
-                      />
-                      {title ? (
-                        <h4 className="mb-12 mt-1 pb-1 text-xl font-semibold">
-                          {title}
-                        </h4>
-                      ) : null}
+                        alt="logo" />
+                      <h4 className="mb-12 mt-1 pb-1 text-xl font-semibold">
+                        Dashboard
+                      </h4>
                     </div>
                   </div>
                   <div className="mx-auto max-w-md px-10">

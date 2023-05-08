@@ -8,8 +8,8 @@
     "k:del-secrets": "kubectl delete secret --ignore-not-found=true jwt-secret",
     "k:secrets": "kubectl create secret generic jwt-secret --from-literal=JWT_SECRET=Key123",
     "skaffold:prep": "yarn k:del-ing && yarn k:del-secrets && yarn k:secrets",
-    "skaffold:run": "skaffold dev --cleanup=false",
-    "dev": "yarn skaffold:prep && yarn skaffold:run",
+    "dev:reset": "yarn skaffold:prep && skaffold dev",
+    "dev": "yarn skaffold:prep && skaffold dev --cleanup=false",
     "dev:auth": "yarn --cwd auth dev",
     "dev:client": "yarn --cwd client dev"
   },
