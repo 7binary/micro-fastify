@@ -2,7 +2,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { PropsWithChildren, useEffect } from 'react';
 import { Provider } from 'react-redux';
 
-import { store, persistor, useActions, useSelector, selectUser } from '@/store';
+import { store, persistor, useActions, useSelector, selectToken } from '@/store';
 
 export const Providers = ({ children }: PropsWithChildren<{}>) => {
   return (
@@ -30,18 +30,18 @@ const PersistGateSSR = ({ children }: PropsWithChildren<{}>) => {
 
 export const AuthProvider = ({ children }: PropsWithChildren<{}>) => {
   const { registerHttpRetry, loadUser, setAppLoaded } = useActions();
-  const user = useSelector(selectUser);
+  const token = useSelector(selectToken);
 
   useEffect(() => {
     setAppLoaded();
     registerHttpRetry();
 
-    if (user) {
+    if (token) {
       (async () => {
         loadUser();
       })();
     }
-  }, [user?.id]);
+  }, [token]);
 
   return (<>{children}</>);
 };

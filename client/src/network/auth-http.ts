@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 
 import { Http } from './http';
 import { User } from '@/types';
@@ -6,8 +6,8 @@ import { User } from '@/types';
 class AuthHttp extends Http {
   prefix = 'api/auth/';
 
-  async loadUser(): Promise<User | null> {
-    const res = await this.get<User | null>('me');
+  async loadUser(config?: AxiosRequestConfig): Promise<User | null> {
+    const res = await this.get<User | null>('me', config);
 
     return res.data;
   }
@@ -37,6 +37,10 @@ class AuthHttp extends Http {
 }
 
 export const authHttp = new AuthHttp();
+export const authIngressHttp = new AuthHttp({
+  baseURL: Http.ingressBaseURL,
+  headers: { Host: process?.env?.DOMAIN },
+});
 
 interface LoginParams {
   email: string;

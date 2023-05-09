@@ -24,6 +24,11 @@ spec:
                   key: JWT_SECRET
             - name: DATABASE_URL
               value: 'postgresql://postgres:postgres@auth-pg-srv/db?schema=public'
+            - name: COOKIE_DOMAIN
+              valueFrom:
+                secretKeyRef:
+                  name: domain
+                  key: DOMAIN
 ---
 apiVersion: v1
 kind: Service

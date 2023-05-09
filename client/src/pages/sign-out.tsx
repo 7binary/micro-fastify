@@ -3,7 +3,7 @@ import Head from 'next/head';
 import { useEffect } from 'react';
 
 import { useActions } from '@/store';
-import { authHttp } from '@/network';
+import { authHttp, Http } from '@/network';
 import { Loader } from '@/ui/Loader';
 import { LoggedLayout } from '@/layouts/LoggedLayout';
 
@@ -13,9 +13,10 @@ const SignOutPage = () => {
 
   useEffect(() => {
     (async () => {
-      authHttp.logout();
       resetAuth();
-      await router.replace('/');
+      authHttp.logout();
+      Http.setToken(null);
+      router.replace('/');
     })();
   }, []);
 

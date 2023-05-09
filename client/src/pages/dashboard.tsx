@@ -1,4 +1,5 @@
 import Head from 'next/head';
+
 import { DashboardPanel } from '@/features/profile/DashboardPanel';
 import { LoggedLayout } from '@/layouts/LoggedLayout';
 

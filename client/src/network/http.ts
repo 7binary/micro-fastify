@@ -30,6 +30,7 @@ export abstract class Http {
   protected static token: string | null = null;
   protected static locale: string | null = null;
   protected static onError?: OnErrorCallback;
+  public static ingressBaseURL = 'http://ingress-nginx-controller.ingress-nginx.svc.cluster.local';
 
   constructor(overrideConfig: AxiosRequestConfig = {}) {
     const config: AxiosRequestConfig = Object.assign({}, defaultConfig, overrideConfig);

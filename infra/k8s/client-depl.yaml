@@ -16,6 +16,12 @@ spec:
       containers:
         - name: client
           image: zineof/f-client
+          env:
+            - name: DOMAIN
+              valueFrom:
+                secretKeyRef:
+                  name: domain
+                  key: DOMAIN
 ---
 apiVersion: v1
 kind: Service

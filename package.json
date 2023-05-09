@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "k:del-ing": "kubectl delete ing --ignore-not-found=true ingress-service",
-    "k:del-secrets": "kubectl delete secret --ignore-not-found=true jwt-secret",
-    "k:secrets": "kubectl create secret generic jwt-secret --from-literal=JWT_SECRET=Key123",
-    "skaffold:prep": "yarn k:del-ing && yarn k:del-secrets && yarn k:secrets",
+    "k:del-secrets": "kubectl delete secret --ignore-not-found=true domain jwt-secret",
+    "k:secret-domain": "kubectl create secret generic domain --from-literal=DOMAIN=fa.is",
+    "k:secret-jwt": "kubectl create secret generic jwt-secret --from-literal=JWT_SECRET=Key123",
+    "skaffold:prep": "yarn k:del-ing && yarn k:del-secrets && yarn k:secret-domain && yarn k:secret-jwt",
     "dev:reset": "yarn skaffold:prep && skaffold dev",
     "dev": "yarn skaffold:prep && skaffold dev --cleanup=false",
     "dev:auth": "yarn --cwd auth dev",

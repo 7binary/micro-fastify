@@ -1,8 +1,10 @@
+import Head from 'next/head';
+import { NextPage } from 'next';
+
 import { RegisterForm } from '@/features/auth/RegisterForm';
 import { GuestLayout } from '@/layouts/GuestLayout';
-import Head from 'next/head';
 
-const SignUpPage = () => {
+const SignUpPage: NextPage<{}> = () => {
   return (
     <>
       <Head>
