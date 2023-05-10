@@ -11,6 +11,7 @@ export const cookiePlugin: FastifyPluginAsync<{
   fastify.register(cookie, {
     secret: opts.secret,
     parseOptions: {
+      path: '/',
       domain: opts.domain,
       httpOnly: true,
       sameSite: true,

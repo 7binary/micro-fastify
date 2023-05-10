@@ -1,11 +1,13 @@
 import Link from 'next/link';
 
-import { selectUser, useSelector } from '@/store';
+import { User } from '@/types';
 import { OutlinedButton } from '@/ui/buttons/OutlinedButton';
 
-export const DashboardPanel = () => {
-  const user = useSelector(selectUser);
+interface Props {
+  user: User;
+}
 
+export const DashboardPanel = ({ user }: Props) => {
   return (
     <div className="mb-10">
       <pre className="block text-xs">

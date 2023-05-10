@@ -37,10 +37,7 @@ class AuthHttp extends Http {
 }
 
 export const authHttp = new AuthHttp();
-export const authIngressHttp = new AuthHttp({
-  baseURL: Http.ingressBaseURL,
-  headers: { Host: process?.env?.DOMAIN },
-});
+export const authIngressHttp = new AuthHttp({ baseURL: Http.ingressBaseURL });
 
 interface LoginParams {
   email: string;

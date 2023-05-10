@@ -3,12 +3,8 @@ import axios, { AxiosInstance, AxiosRequestConfig, AxiosError } from 'axios';
 type AxiosRetryError = AxiosError & {config: {__isRetry?: boolean}};
 type OnErrorCallback = (axiosInstance: AxiosInstance) => (error: AxiosRetryError) => void;
 
-const isServer = typeof window === 'undefined';
-const baseURL = isServer
-  ? (process.env.NEXT_PUBLIC_DOCKER_URL || process.env.NEXT_PUBLIC_API_URL)
-  : process.env.NEXT_PUBLIC_API_URL;
 const defaultConfig: AxiosRequestConfig = {
-  baseURL,
+  baseURL: process?.env?.NEXT_PUBLIC_API_URL,
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
