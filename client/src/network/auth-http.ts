@@ -6,10 +6,10 @@ import { User } from '@/types';
 class AuthHttp extends Http {
   prefix = 'api/auth/';
 
-  async loadUser(config?: AxiosRequestConfig): Promise<User | null> {
-    const res = await this.get<User | null>('me', config);
+  async loadUser(config?: AxiosRequestConfig): Promise<User> {
+    const res = await this.get<{user: User}>('me', config);
 
-    return res.data;
+    return res.data.user;
   }
 
   async register(params: RegisterParams): Promise<AuthResponse> {

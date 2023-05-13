@@ -5,6 +5,7 @@ import jwt from '@fastify/jwt';
 declare module 'fastify' {
   interface FastifyInstance {
     authJwt: (request: FastifyRequest, reply: FastifyReply) => Promise<void>;
+    authJwtOptional: (request: FastifyRequest, reply: FastifyReply) => Promise<void>;
     authJwtCookie: (request: FastifyRequest, reply: FastifyReply) => Promise<void>;
   }
 }
@@ -35,6 +36,12 @@ export const authJwtPlugin: FastifyPluginAsync<{
     } catch (err) {
       reply.send(err);
     }
+  });
+
+  fastify.decorate('authJwtOptional', async (request: FastifyRequest, reply: FastifyReply) => {
+    try {
+      await request.jwtVerify();
+    } catch (err) {}
   });
 
   fastify.decorate('authJwtCookie', async (request: FastifyRequest, reply: FastifyReply) => {
