@@ -8,6 +8,7 @@ import { env } from './env';
 import { authJwtPlugin } from './plugins/auth-jwt.plugin';
 import { cookiePlugin } from './plugins/cookie.plugin';
 import { prismaPlugin } from './plugins/prisma.plugin';
+import { _decorateServices } from './services/_decorate.services';
 
 export const createServer = (): FastifyInstance => {
   const fastify = Fastify({
@@ -38,6 +39,7 @@ export const createServer = (): FastifyInstance => {
   fastify.register(authJwtPlugin, { secret: env.JWT_SECRET });
   fastify.register(prismaPlugin, { databaseUrl: env.DATABASE_URL, withLog: true });
   fastify.register(cookiePlugin, { secret: env.COOKIE_SECRET, domain: env.COOKIE_DOMAIN });
+  fastify.register(_decorateServices);
   fastify.register(autoload, {
     dir: path.join(__dirname, 'routes'),
     ignorePattern: /.*.test.ts/,

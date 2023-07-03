@@ -1,8 +1,8 @@
-console.log('=> Client ENV', {
+console.log('=> Client ENV', JSON.stringify({
   PORT: process?.env?.PORT || 3000,
-  LOCAL: process?.env?.LOCAL,
   NEXT_PUBLIC_API_URL: process?.env?.NEXT_PUBLIC_API_URL,
-});
+  SERVICE_PORTS: process?.env?.SERVICE_PORTS,
+}, null, 2));
 
 module.exports = {
   reactStrictMode: true,
@@ -14,11 +14,23 @@ module.exports = {
     return config;
   },
   rewrites: async () => {
-    return process?.env?.LOCAL ? [
-      {
-        source: '/api/auth/:slug',
-        destination: 'http://localhost:3001/api/auth/:slug',
-      },
-    ] : [];
+    const rewrites = [];
+    const servicePorts = process?.env?.SERVICE_PORTS
+      ? process.env.SERVICE_PORTS.split(',')
+      : null;
+
+    if (Array.isArray(servicePorts) && servicePorts[0] && servicePorts[0].includes(':')) {
+      servicePorts.forEach(servicePort => {
+        const [service, port] = servicePort.split(':');
+        rewrites.push({
+          source: `/api/${service}/:slug`,
+          destination: `http://localhost:${port}/api/${service}/:slug`,
+        });
+      });
+    }
+
+    console.log('=> Client REWERITES', rewrites);
+
+    return rewrites;
   },
 };

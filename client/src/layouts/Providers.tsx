@@ -1,18 +1,21 @@
 import { PersistGate } from 'redux-persist/integration/react';
 import { PropsWithChildren, useEffect } from 'react';
 import { Provider } from 'react-redux';
+import { ThemeProvider } from 'next-themes';
 
 import { store, persistor, useActions, useSelector, selectToken } from '@/store';
 
 export const Providers = ({ children }: PropsWithChildren<{}>) => {
   return (
-    <Provider store={store}>
-      <PersistGateSSR>
-        <AuthProvider>
-          {children}
-        </AuthProvider>
-      </PersistGateSSR>
-    </Provider>
+    <ThemeProvider attribute="class" enableSystem={false} defaultTheme="dark">
+      <Provider store={store}>
+        <PersistGateSSR>
+          <AuthProvider>
+            {children}
+          </AuthProvider>
+        </PersistGateSSR>
+      </Provider>
+    </ThemeProvider>
   );
 };
 

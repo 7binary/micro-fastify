@@ -1,5 +1,5 @@
 export const ErrorIcon = () => (
-  <div className="flex justify-center items-center rounded-full h-2.5 w-2.5 bg-red-500 mr-1">
+  <div className="flex justify-center items-center rounded-full h-3.5 w-3.5 bg-red-500 mr-2">
     <svg
       className="fill-current h-2.5 w-2.5 text-white"
       xmlns="http://www.w3.org/2000/svg"

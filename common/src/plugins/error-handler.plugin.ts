@@ -1,10 +1,5 @@
-import {
-  FastifyInstance,
-  FastifyPluginAsync,
-  FastifyReply,
-  FastifyRequest,
-  ValidationResult,
-} from 'fastify';
+import { FastifyInstance, FastifyReply, FastifyRequest, ValidationResult } from 'fastify';
+import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 import fp from 'fastify-plugin';
 
 interface ErrorObject {
@@ -15,7 +10,7 @@ interface ErrorObject {
   stack?: string;
 }
 
-export const errorHandlerPlugin: FastifyPluginAsync<{
+export const errorHandlerPlugin: FastifyPluginAsyncTypebox<{
   withStack?: boolean;
   withLog?: boolean;
 }> = fp(async (fastify: FastifyInstance, opts) => {

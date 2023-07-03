@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { useActions } from '@/store';
 import { authHttp, Http } from '@/network';
 import { Loader } from '@/ui/Loader';
-import { LoggedLayout } from '@/layouts/LoggedLayout';
+import { GuestLayout } from '@/layouts/GuestLayout';
 
 const SignOutPage = () => {
   const { resetAuth } = useActions();
@@ -25,11 +25,11 @@ const SignOutPage = () => {
       <Head>
         <title>Sign out | MicroFastify</title>
       </Head>
-      <LoggedLayout>
+      <GuestLayout>
         <div className="flex justify-center items-center py-10">
           <Loader />
         </div>
-      </LoggedLayout>
+      </GuestLayout>
     </>
   );
 };

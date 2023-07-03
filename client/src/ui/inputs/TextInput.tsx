@@ -11,31 +11,30 @@ export const TextInput = forwardRef((props: Props, ref: Ref<any>) => {
   const { label, className, ...restProps } = props;
   const errors = Array.isArray(props.errors) ? props.errors.filter(Boolean) : [];
 
+  const Input = (
+    <input
+      className={cx(
+        'w-full rounded-md border border-transparent py-2 px-6 text-base text-body-color placeholder-body-color shadow-one focus:border-primary focus-visible:shadow-none dark:bg-[#242B51] className="dark:shadow-dark',
+        className,
+        errors.length > 0 && 'border-red-500 focus:ring-red-500',
+      )}
+      {...restProps}
+      ref={ref}
+    />
+  );
+
   return (
     <>
-      {label === undefined ? (
-        <input
-          className={cx(
-            'w-full p-2.5 rounded bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500',
-            className,
-          )}
-          {...restProps}
-          ref={ref}
-        />
-      ) : (
-        <label className="block text-sm font-medium text-gray-900 dark:text-white">
-          <div className="mb-1">{label}</div>
-          <input
-            className={cx(
-              'w-full p-2.5 rounded bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500',
-              className,
-              errors.length > 0 && 'outline-red-500 border-red-500 focus:ring-red-500',
-            )}
-            {...restProps}
-            ref={ref}
-          />
+      {label === undefined ? (Input) : (
+        <label
+          htmlFor="email"
+          className="mb-3 block text-sm font-medium text-dark dark:text-white"
+        >
+          <div className="mb-2">{label}</div>
+          {Input}
         </label>
       )}
+
       {errors.map((error, i) => (
         <div
           key={i}
@@ -45,7 +44,10 @@ export const TextInput = forwardRef((props: Props, ref: Ref<any>) => {
           {error}
         </div>
       ))}
-      {errors.length === 0 && <div className="flex invisible text-xs mt-0.5 ml-1">&nbsp;</div>}
+
+      {errors.length === 0 && (
+        <div className="flex invisible text-xs mt-0.5 ml-1">{' '}</div>
+      )}
     </>
   );
 });

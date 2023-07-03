@@ -7,7 +7,7 @@ export const ErrorMessage = ({ children }: PropsWithChildren<{}>) => {
   }
 
   return (
-    <div className="flex items-center font-medium tracking-wide text-red-500 text-xs">
+    <div className="py-3 flex items-center font-medium tracking-wide text-red-500">
       <ErrorIcon />
       {children}
     </div>

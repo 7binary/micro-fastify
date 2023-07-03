@@ -10,15 +10,13 @@
     "k:secret-jwt": "kubectl create secret generic jwt-secret --from-literal=JWT_SECRET=Key123",
     "skaf:prep": "yarn k:del-ing && yarn k:del-secrets && yarn k:secret-domain && yarn k:secret-jwt",
     "skaf:reset": "yarn skaffold:prep && skaffold dev",
-    "skaf": "yarn skaffold:prep && skaffold dev --cleanup=false",
-    "dev": "concurrently -k -c yellow,cyan,green,blue npm:dev:*",
-    "dev:client": "LOCAL=true NEXT_PUBLIC_API_URL=http://localhost:3000 yarn --cwd client dev",
+    "skaf": "yarn skaf:prep && skaffold dev --cleanup=false",
+    "dev": "npx concurrently -k -c yellow,cyan,green,blue npm:dev:*",
+    "dev:client": "SERVICE_PORTS=auth:3001 NEXT_PUBLIC_API_URL=http://localhost:3000 yarn --cwd client dev",
     "dev:auth": "PORT=3001 yarn --cwd auth dev"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "concurrently": "^8.0.1"
-  }
+  "dependencies": {}
 }
