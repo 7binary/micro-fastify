@@ -1,22 +1,25 @@
 import fp from 'fastify-plugin';
-import { FastifyPluginAsync } from 'fastify';
+import { FastifyInstance, FastifyPluginAsync } from 'fastify';
 import cookie from '@fastify/cookie';
 
-export const cookiePlugin: FastifyPluginAsync<{
+interface PluginOptions {
   secret: string;
   domain: string;
   liveDays?: number;
-}> = fp(async (fastify, opts) => {
+}
 
-  fastify.register(cookie, {
-    secret: opts.secret,
-    parseOptions: {
-      path: '/',
-      domain: opts.domain,
-      httpOnly: true,
-      sameSite: true,
-      secure: false,
-      maxAge: (60 * 60 * 24) * (opts.liveDays || 14),
-    },
+export const cookiePlugin: FastifyPluginAsync<PluginOptions> =
+  fp(async (fastify: FastifyInstance, opts: PluginOptions) => {
+
+    fastify.register(cookie, {
+      secret: opts.secret,
+      parseOptions: {
+        path: '/',
+        domain: opts.domain,
+        httpOnly: true,
+        sameSite: true,
+        secure: false,
+        maxAge: (60 * 60 * 24) * (opts.liveDays || 14),
+      },
+    });
   });
-});

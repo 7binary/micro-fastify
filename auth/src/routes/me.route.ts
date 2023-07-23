@@ -1,9 +1,10 @@
-import { FastifyInstance, FastifyPluginOptions, HookHandlerDoneFunction as Done } from 'fastify';
+import { FastifyPluginCallback } from 'fastify';
 import { NotAuthorizedError } from 'fastify-common';
 
-const meRoute = (fastify: FastifyInstance, opts: FastifyPluginOptions, done: Done) => {
+const meRoute: FastifyPluginCallback = (fastify, opts, done) => {
+
   fastify.get('/api/auth/me', {
-    onRequest: [fastify.authJwt],
+    onRequest: [fastify.auth.verify],
   }, async (request, reply) => {
     const user = await fastify.userService.findOneById(request.user.id);
     if (!user) {
@@ -16,20 +17,18 @@ const meRoute = (fastify: FastifyInstance, opts: FastifyPluginOptions, done: Don
   });
 
   fastify.get('/api/auth/me-optional', {
-    onRequest: [fastify.authJwtOptional],
+    onRequest: [fastify.auth.verifyOptional],
   }, async (request, reply) => {
-    let userData = null;
-
     if (request.user?.id) {
       const user = await fastify.userService.findOneById(request.user.id);
       if (user) {
-        userData = fastify.userService.toJson(user);
+        return reply.status(200).send({
+          user: fastify.userService.toJson(user),
+        });
       }
     }
 
-    reply.status(200).send({
-      user: userData,
-    });
+    reply.status(200).send({ user: null });
   });
 
   done();

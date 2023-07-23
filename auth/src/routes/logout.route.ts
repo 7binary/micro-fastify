@@ -1,6 +1,7 @@
-import { FastifyInstance, FastifyPluginOptions, HookHandlerDoneFunction as Done } from 'fastify';
+import { FastifyPluginCallback } from 'fastify';
 
-const logoutRoute = (fastify: FastifyInstance, opts: FastifyPluginOptions, done: Done) => {
+const logoutRoute: FastifyPluginCallback = (fastify, opts, done) => {
+
   fastify.get('/api/auth/logout', async (request, reply) => {
     const cookieRefreshToken = request.cookies?.refreshToken as string;
 
@@ -9,7 +10,7 @@ const logoutRoute = (fastify: FastifyInstance, opts: FastifyPluginOptions, done:
     }
 
     reply.clearCookie('refreshToken').status(200).send({
-      result: 'OK'
+      result: 'OK',
     });
   });
 

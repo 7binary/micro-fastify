@@ -1,5 +1,5 @@
 import fp from 'fastify-plugin';
-import { FastifyPluginAsync } from 'fastify';
+import { FastifyInstance, FastifyPluginAsync } from 'fastify';
 import { PrismaClient } from '@prisma/client';
 
 declare module 'fastify' {
@@ -8,11 +8,14 @@ declare module 'fastify' {
   }
 }
 
-export const prismaPlugin: FastifyPluginAsync<{
+interface PluginOptions {
   databaseUrl: string;
   maxTimeoutSeconds?: number;
   withLog?: boolean;
-}> = fp(async (fastify, opts) => {
+}
+
+export const prismaPlugin: FastifyPluginAsync<PluginOptions>
+  = fp(async (fastify: FastifyInstance, opts: PluginOptions) => {
 
   opts.maxTimeoutSeconds = opts.maxTimeoutSeconds ?? 610;
   let isConnected = false;

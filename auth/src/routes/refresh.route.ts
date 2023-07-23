@@ -1,9 +1,10 @@
-import { FastifyInstance, FastifyPluginOptions, HookHandlerDoneFunction as Done } from 'fastify';
+import { FastifyPluginCallback } from 'fastify';
 import { NotAuthorizedError } from 'fastify-common';
 
-const refreshRoute = (fastify: FastifyInstance, opts: FastifyPluginOptions, done: Done) => {
+const refreshRoute: FastifyPluginCallback = (fastify, opts, done) => {
+
   fastify.get('/api/auth/refresh', {
-    onRequest: [fastify.authJwtCookie],
+    onRequest: [fastify.auth.verifyCookie],
   }, async (request, reply) => {
     const tokenModel = await fastify.tokenService
       .findRefreshToken(request.cookies.refreshToken!);
@@ -16,8 +17,7 @@ const refreshRoute = (fastify: FastifyInstance, opts: FastifyPluginOptions, done
       throw new NotAuthorizedError();
     }
 
-    const { accessToken, refreshToken } = await fastify.userService
-      .generateAuthTokens(user, fastify.jwt);
+    const { accessToken, refreshToken } = await fastify.auth.generateAuthTokens(user);
     await fastify.tokenService.saveRefreshToken(user.id, refreshToken);
 
     reply.setCookie('refreshToken', refreshToken).status(200).send({

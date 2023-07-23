@@ -1,6 +1,12 @@
-import { FastifyInstance, FastifyReply, FastifyRequest, ValidationResult } from 'fastify';
-import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
-import fp from 'fastify-plugin';
+import {
+  FastifyError,
+  FastifyInstance,
+  FastifyPluginCallback,
+  FastifyReply,
+  FastifyRequest,
+  HookHandlerDoneFunction as Done,
+  ValidationResult,
+} from 'fastify';
 
 interface ErrorObject {
   statusCode: number;
@@ -10,12 +16,15 @@ interface ErrorObject {
   stack?: string;
 }
 
-export const errorHandlerPlugin: FastifyPluginAsyncTypebox<{
-  withStack?: boolean;
-  withLog?: boolean;
-}> = fp(async (fastify: FastifyInstance, opts) => {
+interface PluginOptions {
+  withStack: boolean;
+  withLog: boolean;
+}
 
-  fastify.setErrorHandler((err: any, request: FastifyRequest, reply: FastifyReply) => {
+export const errorHandlerPlugin: FastifyPluginCallback<PluginOptions>
+  = (fastify: FastifyInstance, opts: PluginOptions, done: Done) => {
+
+  fastify.setErrorHandler((err: FastifyError, request: FastifyRequest, reply: FastifyReply) => {
     const { message, validation, code, stack } = err;
     const hasValidationErrors = Array.isArray(validation);
     const statusCode = err.statusCode || 500;
@@ -47,7 +56,9 @@ export const errorHandlerPlugin: FastifyPluginAsyncTypebox<{
 
     return reply.status(statusCode).send(errorObject);
   });
-}, { name: 'error-handler', fastify: '4.x' });
+
+  done();
+};
 
 const statuses: Record<string, string> = {
   '200': 'OK',

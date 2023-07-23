@@ -11,7 +11,7 @@ interface AuthTokens {
 
 declare module 'fastify' {
   interface FastifyInstance {
-    authJwt: {
+    auth: {
       generateAuthTokens: (payload: JwtPayload) => AuthTokens;
       verify: (request: FastifyRequest, reply: FastifyReply) => Promise<void>;
       verifyOptional: (request: FastifyRequest, reply: FastifyReply) => Promise<void>;
@@ -34,7 +34,7 @@ interface PluginOptions {
   refreshTokenLives?: string;
 }
 
-export const authJwtPlugin: FastifyPluginAsync<PluginOptions> =
+export const authPlugin: FastifyPluginAsync<PluginOptions> =
   fp(async (fastify: FastifyInstance, opts: PluginOptions) => {
 
     fastify.register(jwt, {
@@ -78,7 +78,7 @@ export const authJwtPlugin: FastifyPluginAsync<PluginOptions> =
       }
     };
 
-    fastify.decorate('authJwt', {
+    fastify.decorate('auth', {
       generateAuthTokens,
       verify,
       verifyOptional,
