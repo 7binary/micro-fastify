@@ -1,10 +1,8 @@
 import {
   FastifyError,
   FastifyInstance,
-  FastifyPluginCallback,
   FastifyReply,
   FastifyRequest,
-  HookHandlerDoneFunction as Done,
   ValidationResult,
 } from 'fastify';
 
@@ -17,13 +15,11 @@ interface ErrorObject {
 }
 
 interface PluginOptions {
-  withStack: boolean;
   withLog: boolean;
+  withStack: boolean;
 }
 
-export const errorHandlerPlugin: FastifyPluginCallback<PluginOptions>
-  = (fastify: FastifyInstance, opts: PluginOptions, done: Done) => {
-
+export const errorHandlerPlugin = (fastify: FastifyInstance, opts: PluginOptions) => {
   fastify.setErrorHandler((err: FastifyError, request: FastifyRequest, reply: FastifyReply) => {
     const { message, validation, code, stack } = err;
     const hasValidationErrors = Array.isArray(validation);
@@ -51,13 +47,13 @@ export const errorHandlerPlugin: FastifyPluginCallback<PluginOptions>
     if (opts.withStack && stack) {
       errorObject.stack = stack;
     }
-
-    opts.withLog && fastify.log.error(stack || errorObject);
+    if (opts.withLog) {
+      fastify.log.info(request.body, 'REQUEST BODY');
+      fastify.log.warn(errorObject, 'RESPONSE ERROR');
+    }
 
     return reply.status(statusCode).send(errorObject);
   });
-
-  done();
 };
 
 const statuses: Record<string, string> = {

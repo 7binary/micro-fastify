@@ -11,7 +11,7 @@ declare module 'fastify' {
   }
 }
 
-export const _registerServices = fp(async (fastify: FastifyInstance) => {
+export const registerServices = fp(async (fastify: FastifyInstance) => {
   fastify.decorate('userService', new UserService(fastify.prisma.user));
   fastify.decorate('tokenService', new TokenService(fastify.prisma.token));
 });

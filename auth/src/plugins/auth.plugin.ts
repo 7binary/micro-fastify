@@ -1,5 +1,5 @@
+import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import fp from 'fastify-plugin';
-import { FastifyInstance, FastifyPluginAsync, FastifyReply, FastifyRequest } from 'fastify';
 import jwt from '@fastify/jwt';
 
 export type JwtPayload = {id: number};
@@ -34,54 +34,53 @@ interface PluginOptions {
   refreshTokenLives?: string;
 }
 
-export const authPlugin: FastifyPluginAsync<PluginOptions> =
-  fp(async (fastify: FastifyInstance, opts: PluginOptions) => {
+export const authPlugin = fp(async (fastify: FastifyInstance, opts: PluginOptions) => {
 
-    fastify.register(jwt, {
-      secret: opts.secret,
-      cookie: {
-        cookieName: opts.cookieName || 'refreshToken',
-        signed: false,
-      },
-    });
-
-    const generateAuthTokens = (payload: JwtPayload): AuthTokens => {
-      const accessToken = fastify.jwt.sign(payload, {
-        expiresIn: opts.accessTokenLives || '15m',
-      });
-      const refreshToken = fastify.jwt.sign(payload, {
-        expiresIn: opts.refreshTokenLives || '14d',
-      });
-
-      return { accessToken, refreshToken };
-    };
-
-    const verify = async (request: FastifyRequest, reply: FastifyReply) => {
-      try {
-        await request.jwtVerify();
-      } catch (err) {
-        reply.send(err);
-      }
-    };
-
-    const verifyOptional = async (request: FastifyRequest, reply: FastifyReply) => {
-      try {
-        await request.jwtVerify();
-      } catch (err) {}
-    };
-
-    const verifyCookie = async (request: FastifyRequest, reply: FastifyReply) => {
-      try {
-        await request.jwtVerify({ onlyCookie: true });
-      } catch (err) {
-        reply.send(err);
-      }
-    };
-
-    fastify.decorate('auth', {
-      generateAuthTokens,
-      verify,
-      verifyOptional,
-      verifyCookie,
-    });
+  fastify.register(jwt, {
+    secret: opts.secret,
+    cookie: {
+      cookieName: opts.cookieName || 'refreshToken',
+      signed: false,
+    },
   });
+
+  const generateAuthTokens = (payload: JwtPayload): AuthTokens => {
+    const accessToken = fastify.jwt.sign(payload, {
+      expiresIn: opts.accessTokenLives ?? '15m',
+    });
+    const refreshToken = fastify.jwt.sign(payload, {
+      expiresIn: opts.refreshTokenLives ?? '14d',
+    });
+
+    return { accessToken, refreshToken };
+  };
+
+  const verify = async (request: FastifyRequest, reply: FastifyReply) => {
+    try {
+      await request.jwtVerify();
+    } catch (err) {
+      reply.send(err);
+    }
+  };
+
+  const verifyOptional = async (request: FastifyRequest, reply: FastifyReply) => {
+    try {
+      await request.jwtVerify();
+    } catch (err) {}
+  };
+
+  const verifyCookie = async (request: FastifyRequest, reply: FastifyReply) => {
+    try {
+      await request.jwtVerify({ onlyCookie: true });
+    } catch (err) {
+      reply.send(err);
+    }
+  };
+
+  fastify.decorate('auth', {
+    generateAuthTokens,
+    verify,
+    verifyOptional,
+    verifyCookie,
+  });
+});

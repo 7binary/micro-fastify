@@ -2,13 +2,14 @@ import path from 'path';
 import Fastify, { FastifyInstance } from 'fastify';
 import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
 import autoload from '@fastify/autoload';
+import helmet from '@fastify/helmet';
 import { errorHandlerPlugin } from 'fastify-common';
 
 import { env } from './env';
 import { authPlugin } from './plugins/auth.plugin';
 import { cookiePlugin } from './plugins/cookie.plugin';
 import { prismaPlugin } from './plugins/prisma.plugin';
-import { _registerServices } from './services/_register.services';
+import { registerServices } from './services';
 
 export const createServer = (): FastifyInstance => {
   const fastify = Fastify({
@@ -28,22 +29,13 @@ export const createServer = (): FastifyInstance => {
     },
   }).withTypeProvider<TypeBoxTypeProvider>();
 
-  if (env.NODE_ENV === 'development') {
-    fastify.addHook('preHandler', function (req, reply, next) {
-      req.body && req.log.info({ body: req.body }, 'parsed body');
-      next();
-    });
-  }
-
-  fastify.register(errorHandlerPlugin, { withStack: env.NODE_ENV === 'test', withLog: true });
+  fastify.register(helmet);
   fastify.register(authPlugin, { secret: env.JWT_SECRET });
   fastify.register(prismaPlugin, { databaseUrl: env.DATABASE_URL, withLog: true });
   fastify.register(cookiePlugin, { secret: env.COOKIE_SECRET, domain: env.COOKIE_DOMAIN });
-  fastify.register(_registerServices);
-  fastify.register(autoload, {
-    dir: path.join(__dirname, 'routes'),
-    ignorePattern: /.*.test.ts/,
-  });
+  fastify.register(registerServices);
+  fastify.register(autoload, { dir: path.join(__dirname, 'routes'), ignorePattern: /.*.test.ts/ });
+  errorHandlerPlugin(fastify, { withLog: true, withStack: env.NODE_ENV === 'test' });
 
   return fastify;
 };

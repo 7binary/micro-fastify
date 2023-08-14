@@ -1,5 +1,5 @@
+import { FastifyInstance } from 'fastify';
 import fp from 'fastify-plugin';
-import { FastifyInstance, FastifyPluginAsync } from 'fastify';
 import { PrismaClient } from '@prisma/client';
 
 declare module 'fastify' {
@@ -14,8 +14,7 @@ interface PluginOptions {
   withLog?: boolean;
 }
 
-export const prismaPlugin: FastifyPluginAsync<PluginOptions>
-  = fp(async (fastify: FastifyInstance, opts: PluginOptions) => {
+export const prismaPlugin = fp(async (fastify: FastifyInstance, opts: PluginOptions) => {
 
   opts.maxTimeoutSeconds = opts.maxTimeoutSeconds ?? 610;
   let isConnected = false;
