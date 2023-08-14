@@ -1,6 +1,6 @@
 {
   "name": "fastify-common",
-  "version": "1.8.6",
+  "version": "1.9.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
