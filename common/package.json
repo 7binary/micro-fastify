@@ -1,6 +1,6 @@
 {
   "name": "fastify-common",
-  "version": "1.9.1",
+  "version": "1.10.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -22,7 +22,8 @@
   },
   "dependencies": {
     "@fastify/error": "3.3.0",
-    "fastify": "4.21.0"
+    "fastify": "4.21.0",
+    "fastify-plugin": "4.5.1"
   },
   "devDependencies": {
     "@types/node": "^18.15.0",
