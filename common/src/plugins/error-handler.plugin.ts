@@ -5,6 +5,7 @@ import {
   FastifyRequest,
   ValidationResult,
 } from 'fastify';
+import fp from 'fastify-plugin';
 
 interface ErrorObject {
   statusCode: number;
@@ -19,7 +20,8 @@ interface PluginOptions {
   withStack: boolean;
 }
 
-export const errorHandlerPlugin = (fastify: FastifyInstance, opts: PluginOptions) => {
+export const errorHandlerPlugin = fp((fastify: FastifyInstance, opts: PluginOptions, done) => {
+
   fastify.setErrorHandler((err: FastifyError, request: FastifyRequest, reply: FastifyReply) => {
     const { message, validation, code, stack } = err;
     const hasValidationErrors = Array.isArray(validation);
@@ -54,7 +56,9 @@ export const errorHandlerPlugin = (fastify: FastifyInstance, opts: PluginOptions
 
     return reply.status(statusCode).send(errorObject);
   });
-};
+
+  done();
+});
 
 const statuses: Record<string, string> = {
   '200': 'OK',

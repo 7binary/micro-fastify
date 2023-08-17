@@ -9,11 +9,11 @@
     "test": "yarn test:reset && yarn test:run",
     "test:reset": "export $(cat .env.test | xargs) && prisma migrate reset --force",
     "test:run": "export $(cat .env.test | xargs) && tap --ts --reporter=list --no-coverage --comments --node-arg=--require=tsconfig-paths/register src/**/*.test.ts",
-    "prisma:migrate": "prisma migrate dev --name",
+    "prisma:create": "prisma migrate dev --name",
     "prisma:studio": "npx prisma studio",
     "prisma:generate": "prisma generate",
     "prisma:deploy": "prisma migrate deploy",
-    "db:reset": "prisma migrate reset && rm -rf ./prisma/migrations && prisma migrate dev --name init && prisma generate"
+    "prisma:reset": "prisma migrate reset && rm -rf ./prisma/migrations && prisma migrate dev --name init && prisma generate"
   },
   "keywords": [],
   "author": "",
@@ -32,7 +32,7 @@
     "dotenv": "16.3.1",
     "env-var": "7.3.1",
     "fastify": "4.21.0",
-    "fastify-common": "1.9.1",
+    "fastify-common": "1.10.0",
     "fastify-plugin": "4.5.1",
     "prisma": "5.1.1"
   },

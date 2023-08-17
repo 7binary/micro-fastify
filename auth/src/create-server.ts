@@ -29,13 +29,13 @@ export const createServer = (): FastifyInstance => {
     },
   }).withTypeProvider<TypeBoxTypeProvider>();
 
+  fastify.register(errorHandlerPlugin, { withLog: true, withStack: env.NODE_ENV === 'test' });
   fastify.register(helmet);
   fastify.register(authPlugin, { secret: env.JWT_SECRET });
   fastify.register(prismaPlugin, { databaseUrl: env.DATABASE_URL, withLog: true });
   fastify.register(cookiePlugin, { secret: env.COOKIE_SECRET, domain: env.COOKIE_DOMAIN });
   fastify.register(registerServices);
   fastify.register(autoload, { dir: path.join(__dirname, 'routes'), ignorePattern: /.*.test.ts/ });
-  errorHandlerPlugin(fastify, { withLog: true, withStack: env.NODE_ENV === 'test' });
 
   return fastify;
 };

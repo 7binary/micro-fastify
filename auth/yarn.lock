@@ -1136,13 +1136,14 @@ fastfall@^1.5.0:
   dependencies:
     reusify "^1.0.0"
 
-fastify-common@1.9.1:
-  version "1.9.1"
-  resolved "https://registry.yarnpkg.com/fastify-common/-/fastify-common-1.9.1.tgz#a63c4b2d9d482c1773eb9b3d2b03e2d21e330f0e"
-  integrity sha512-c0ioMj314C+X2c8u8EpyTtoslagpqjKmT5QJZ7EU9Wa/ZfcI/DMREY7P4+C3Xi6ATReFXy5pmcNhJVuJ/WiFGQ==
+fastify-common@1.10.0:
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/fastify-common/-/fastify-common-1.10.0.tgz#c730720bb7e40e9c1cb871b4f5b2d88243d976f5"
+  integrity sha512-Wo49EbqKPXgdUquh2v6c5ZtuxfF1WkmEoKSnfYHL7jFv6ATZPwxgLVogDy7R1xhbfuX4IL479hG3TwOFVhgxMg==
   dependencies:
     "@fastify/error" "3.3.0"
     fastify "4.21.0"
+    fastify-plugin "4.5.1"
 
 fastify-plugin@4.5.1, fastify-plugin@^4.2.1:
   version "4.5.1"
