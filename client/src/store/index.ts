@@ -4,7 +4,7 @@ import { AsyncThunk, AsyncThunkPayloadCreator, configureStore } from '@reduxjs/t
 import { TypedUseSelectorHook, useSelector as _useSelector } from 'react-redux';
 import thunk from 'redux-thunk';
 
-import { RootState, rootReducer } from './rootReducer';
+import { RootState, rootReducer } from './root-reducer';
 import { Http } from '@/network';
 
 const persistConfig = {
@@ -25,7 +25,7 @@ const rehydrationCallback = () => {
 const persistor = persistStore(store, null, rehydrationCallback);
 
 // exports
-export * from './rootReducer';
+export * from './root-reducer';
 export type AppDispatch = typeof store.dispatch;
 export const useSelector: TypedUseSelectorHook<RootState> = _useSelector;
 export { store, persistor };

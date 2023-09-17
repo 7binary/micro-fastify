@@ -13,10 +13,12 @@ const SignOutPage = () => {
 
   useEffect(() => {
     (async () => {
+      try {
+        await authHttp.logout();
+      } catch (e) {}
       resetAuth();
-      authHttp.logout();
       Http.setToken(null);
-      router.replace('/');
+      await router.replace('/');
     })();
   }, []);
 
