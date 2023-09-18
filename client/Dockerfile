@@ -1,11 +1,9 @@
-FROM node:alpine
-
-RUN apk update
-RUN apk add vim nano
-
+FROM node:16.15.0-alpine
 WORKDIR /app
-COPY package*.json ./
-RUN yarn install --frozen-lockfile
+
+COPY package.json pnpm-lock.yaml ./
+RUN npm install -g pnpm
+RUN pnpm install --frozen-lockfile
 COPY . .
 
-CMD ["yarn", "dev"]
+CMD ["pnpm", "dev"]

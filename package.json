@@ -9,7 +9,7 @@
     "k:secret-domain": "kubectl create secret generic domain --from-literal=DOMAIN=fa.is",
     "k:secret-jwt": "kubectl create secret generic jwt-secret --from-literal=JWT_SECRET=Key123",
     "skaf:prep": "yarn k:del-ing && yarn k:del-secrets && yarn k:secret-domain && yarn k:secret-jwt",
-    "skaf:reset": "yarn skaffold:prep && skaffold dev",
+    "skaf:reset": "yarn skaf:prep && skaffold dev",
     "skaf": "yarn skaf:prep && skaffold dev --cleanup=false",
     "dev": "npx concurrently -k -c yellow,cyan,green,blue npm:dev:*",
     "dev:client": "SERVICE_PORTS=auth:3001 NEXT_PUBLIC_API_URL=http://localhost:3000 yarn --cwd client dev",
