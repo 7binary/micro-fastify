@@ -83,4 +83,4 @@ export const authPlugin = fp(async (fastify: FastifyInstance, opts: PluginOption
     verifyOptional,
     verifyCookie,
   });
-});
+}, { name: 'auth' });

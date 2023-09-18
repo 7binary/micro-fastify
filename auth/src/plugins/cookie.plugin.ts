@@ -21,4 +21,4 @@ export const cookiePlugin = fp(async (fastify: FastifyInstance, opts: PluginOpti
       maxAge: (60 * 60 * 24) * (opts.liveDays || 14),
     },
   });
-});
+}, { name: 'cookie' });

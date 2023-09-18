@@ -27,6 +27,7 @@ export const createServer = (): FastifyInstance => {
         },
       },
     },
+    pluginTimeout: 99000,
   }).withTypeProvider<TypeBoxTypeProvider>();
 
   fastify.register(errorHandlerPlugin, { withLog: true, withStack: env.NODE_ENV === 'test' });
