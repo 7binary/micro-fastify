@@ -22,6 +22,15 @@ interface PluginOptions {
 
 export const errorHandlerPlugin = fp((fastify: FastifyInstance, opts: PluginOptions, done) => {
 
+  if (opts.withLog) {
+    fastify.addHook('preHandler', (req, reply, next) => {
+      if (req.body) {
+        fastify.log.info(req.body, '[REQUEST BODY]');
+      }
+      next();
+    });
+  }
+
   fastify.setErrorHandler((err: FastifyError, request: FastifyRequest, reply: FastifyReply) => {
     const { message, validation, code, stack } = err;
     const hasValidationErrors = Array.isArray(validation);
@@ -50,8 +59,7 @@ export const errorHandlerPlugin = fp((fastify: FastifyInstance, opts: PluginOpti
       errorObject.stack = stack;
     }
     if (opts.withLog) {
-      fastify.log.info(request.body, 'REQUEST BODY');
-      fastify.log.warn(errorObject, 'RESPONSE ERROR');
+      fastify.log.warn(errorObject, '[RESPONSE ERROR]');
     }
 
     return reply.status(statusCode).send(errorObject);
