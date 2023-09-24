@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "prepare": "prisma generate",
     "build": "prisma generate && rm -rf build && tsc && tsc-alias && rm -rf build/routes/__test__",
     "start": "node build/index.js",
-    "dev": "tsnd -r tsconfig-paths/register --respawn --exit-child --transpile-only --watch src src/index.ts",
+    "dev": "tsx watch src/index.ts",
     "test": "pnpm test:reset && pnpm test:run",
     "test:reset": "export $(cat .env.test | xargs) && prisma migrate reset --force",
     "test:run": "export $(cat .env.test | xargs) && tap --ts --reporter=list --no-coverage --comments --node-arg=--require=tsconfig-paths/register src/**/*.test.ts",
@@ -43,9 +44,10 @@
     "@types/tap": "^15.0.9",
     "pino-pretty": "^10.2.0",
     "tap": "^16.3.8",
-    "ts-node-dev": "^2.0.0",
+    "ts-node": "^10.9.1",
     "tsc-alias": "^1.8.7",
     "tsconfig-paths": "^4.2.0",
+    "tsx": "^3.12.10",
     "typescript": "^5.2.2"
   }
 }

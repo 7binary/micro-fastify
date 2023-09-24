@@ -8,10 +8,14 @@
       "@/*": ["src/*"]
     },
     "esModuleInterop": true,
+    "allowJs": false,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
     "rootDir": "./src",
     "outDir": "./build"
+  },
+  "ts-node": {
+    "files": true
   }
 }
