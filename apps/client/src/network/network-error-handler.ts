@@ -26,6 +26,7 @@ export const networkErrorHandler = (
     for (const [errorField, errorMessage] of Object.entries(validation)) {
       setError(errorField, { type: 'server', message: errorMessage });
     }
+
     return;
   }
 

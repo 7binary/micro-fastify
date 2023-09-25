@@ -49,6 +49,7 @@ const registerHttpRetry = createAsyncThunk('auth/registry-http-retry', async (_,
         const authResponse = await authHttp.refresh();
         dispatch(setAuthAsync(authResponse));
         error.config.headers.Authorization = `Bearer ${authResponse.accessToken}`;
+
         return axiosInstance.request(error.config);
       } catch (refreshError: any) {
         if (refreshError.response?.status === 401) {

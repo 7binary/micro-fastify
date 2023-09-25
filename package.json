@@ -10,14 +10,15 @@
     "k:secret-domain": "kubectl create secret generic domain --from-literal=DOMAIN=fa.is",
     "k:secret-jwt": "kubectl create secret generic jwt-secret --from-literal=JWT_SECRET=Key123",
     "--- SKAFFOLD ---": "---------------------------------------------------------------",
+    "skaf": "pnpm skaf:prep && skaffold dev --cleanup=false",
     "skaf:prep": "pnpm k:del-ing && pnpm k:del-secrets && pnpm k:secret-domain && pnpm k:secret-jwt",
     "skaf:reset": "pnpm skaf:prep && skaffold dev",
-    "skaf": "pnpm skaf:prep && skaffold dev --cleanup=false",
     "--- LOCAL-RUN ---": "--------------------------------------------------------------",
-    "dev": "concurrently -k -c yellow,cyan,green,blue,purple npm:dev:*",
-    "test": "concurrently -k -c cyan,green,blue,purple npm:test:*",
-    "lint": "concurrently -k -c cyan,green,blue,purple -s first npm:lint:*",
-    "lint:fix": "eslint \"apps/**/*.ts\" --fix",
+    "prepare": "husky install",
+    "dev": "concurrently -k -c magenta,yellow,cyan,green,blue,red npm:dev:*",
+    "test": "concurrently -k -c magenta,yellow,cyan,green,blue,red npm:test:*",
+    "lint": "concurrently -c magenta,yellow,cyan,green,blue,red npm:lint:*",
+    "lint:eslint": "eslint --fix --max-warnings 10 \"apps/**/*.ts\"",
     "--- CLIENT ---": "-----------------------------------------------------------------",
     "dev:client": "SERVICE_PORTS=auth:3001 NEXT_PUBLIC_API_URL=http://localhost:3000 pnpm -C apps/client dev",
     "lint:client": "tsc -p apps/client --noEmit --incremental",
@@ -27,7 +28,7 @@
     "lint:auth": "tsc -p apps/auth --noEmit --incremental"
   },
   "keywords": [],
-  "author": "",
+  "author": "Artem Zinovev",
   "license": "ISC",
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^6.7.2",
@@ -36,6 +37,7 @@
     "eslint": "^8.50.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-import": "^2.28.1",
+    "husky": "^8.0.3",
     "typescript": "^5.2.2"
   }
 }
