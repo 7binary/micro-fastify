@@ -12,7 +12,7 @@ build:
     push: false
   artifacts:
     - image: zineof/f-auth
-      context: auth
+      context: apps/auth
       docker:
         dockerfile: Dockerfile
       sync:
@@ -20,7 +20,7 @@ build:
           - src: 'src/**/*.ts'
             dest: .
     - image: zineof/f-client
-      context: client
+      context: apps/client
       docker:
         dockerfile: Dockerfile
       sync:
@@ -30,4 +30,6 @@ build:
           - src: 'src/**/*.tsx'
             dest: .
           - src: 'src/**/*.css'
+            dest: .
+          - src: 'src/**/*.scss'
             dest: .

@@ -63,7 +63,7 @@ export const authPlugin = fp(async (fastify: FastifyInstance, opts: PluginOption
     }
   };
 
-  const verifyOptional = async (request: FastifyRequest, reply: FastifyReply) => {
+  const verifyOptional = async (request: FastifyRequest) => {
     try {
       await request.jwtVerify();
     } catch (err) {}

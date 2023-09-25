@@ -62,8 +62,9 @@ export class UserService {
 }
 
 function exclude<User, Key extends keyof User>(model: User, keys: Key[]): Omit<User, Key> {
-  for (let key of keys) {
+  for (const key of keys) {
     delete model[key];
   }
+
   return model;
 }

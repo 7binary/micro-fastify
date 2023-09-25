@@ -4,21 +4,38 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "--- KUBERNETES ---": "-------------------------------------------------------------",
     "k:del-ing": "kubectl delete ing --ignore-not-found=true ingress-service",
     "k:del-secrets": "kubectl delete secret --ignore-not-found=true domain jwt-secret",
     "k:secret-domain": "kubectl create secret generic domain --from-literal=DOMAIN=fa.is",
     "k:secret-jwt": "kubectl create secret generic jwt-secret --from-literal=JWT_SECRET=Key123",
+    "--- SKAFFOLD ---": "---------------------------------------------------------------",
     "skaf:prep": "pnpm k:del-ing && pnpm k:del-secrets && pnpm k:secret-domain && pnpm k:secret-jwt",
     "skaf:reset": "pnpm skaf:prep && skaffold dev",
     "skaf": "pnpm skaf:prep && skaffold dev --cleanup=false",
-    "dev": "npx concurrently -k -c yellow,cyan,green,blue,purple npm:dev:*",
-    "dev:client": "SERVICE_PORTS=auth:3001 NEXT_PUBLIC_API_URL=http://localhost:3000 pnpm -C client dev",
-    "dev:auth": "PORT=3001 pnpm -C auth dev",
-    "test": "npx concurrently -k -c cyan,green,blue,purple npm:test:*",
-    "test:auth": "pnpm -C auth test"
+    "--- LOCAL-RUN ---": "--------------------------------------------------------------",
+    "dev": "concurrently -k -c yellow,cyan,green,blue,purple npm:dev:*",
+    "test": "concurrently -k -c cyan,green,blue,purple npm:test:*",
+    "lint": "concurrently -k -c cyan,green,blue,purple -s first npm:lint:*",
+    "lint:fix": "eslint \"apps/**/*.ts\" --fix",
+    "--- CLIENT ---": "-----------------------------------------------------------------",
+    "dev:client": "SERVICE_PORTS=auth:3001 NEXT_PUBLIC_API_URL=http://localhost:3000 pnpm -C apps/client dev",
+    "lint:client": "tsc -p apps/client --noEmit --incremental",
+    "--- AUTH ---": "-------------------------------------------------------------------",
+    "dev:auth": "PORT=3001 pnpm -C apps/auth dev",
+    "test:auth": "pnpm -C apps/auth test",
+    "lint:auth": "tsc -p apps/auth --noEmit --incremental"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {}
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.7.2",
+    "@typescript-eslint/parser": "^6.7.2",
+    "concurrently": "^8.2.1",
+    "eslint": "^8.50.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-import": "^2.28.1",
+    "typescript": "^5.2.2"
+  }
 }
