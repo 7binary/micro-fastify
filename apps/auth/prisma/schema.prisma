@@ -9,8 +9,9 @@ datasource db {
 
 model User {
   id           Int      @id @default(autoincrement())
-  email        String   @unique
   uuid         String   @default(uuid()) @db.Uuid
+  fullName     String?
+  email        String   @unique
   passwordSalt String
   passwordHash String
   createdAt    DateTime @default(now())

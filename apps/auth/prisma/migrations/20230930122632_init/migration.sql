@@ -1,8 +1,9 @@
 -- CreateTable
 CREATE TABLE "user" (
     "id" SERIAL NOT NULL,
-    "email" TEXT NOT NULL,
     "uuid" UUID NOT NULL,
+    "fullName" TEXT,
+    "email" TEXT NOT NULL,
     "passwordSalt" TEXT NOT NULL,
     "passwordHash" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,

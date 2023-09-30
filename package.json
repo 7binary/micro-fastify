@@ -16,7 +16,7 @@
     "--- LOCAL-RUN ---": "--------------------------------------------------------------",
     "prepare": "husky install",
     "dev": "concurrently -k -c magenta,yellow,cyan,green,blue,red npm:dev:*",
-    "test": "concurrently -k -c magenta,yellow,cyan,green,blue,red npm:test:*",
+    "test": "concurrently -c magenta,yellow,cyan,green,blue,red npm:test:*",
     "lint": "concurrently -c magenta,yellow,cyan,green,blue,red npm:lint:*",
     "lint:eslint": "eslint --fix --max-warnings 10 \"apps/**/*.ts\"",
     "--- CLIENT ---": "-----------------------------------------------------------------",
