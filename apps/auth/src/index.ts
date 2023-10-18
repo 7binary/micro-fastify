@@ -9,5 +9,6 @@ fastify.listen({ port: env.PORT, host: '0.0.0.0' }, (err, address) => {
     process.exit(1);
   }
 
-  console.info(`=> Server API ${address.replace('0.0.0.0', 'localhost')} with ENV`, env);
+  fastify.log.info(env, '[SERVER] ENV');
+  fastify.log.info(`[SERVER] API ${address.replace('0.0.0.0', 'localhost')}`);
 });
