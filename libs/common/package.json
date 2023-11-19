@@ -26,9 +26,9 @@
     "fastify-plugin": "^4.5.1"
   },
   "devDependencies": {
-    "@types/node": "^18.15.0",
-    "del-cli": "^5.0.0",
-    "esbuild": "^0.19.5",
+    "@types/node": "^20.9.2",
+    "del-cli": "^5.1.0",
+    "esbuild": "^0.19.6",
     "typescript": "^5.2.2"
   }
 }
