@@ -12,6 +12,7 @@ model User {
   uuid         String   @default(uuid()) @db.Uuid
   fullName     String?
   email        String   @unique
+  gender       String?
   passwordSalt String
   passwordHash String
   createdAt    DateTime @default(now())

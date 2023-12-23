@@ -15,8 +15,7 @@ interface PluginOptions {
 }
 
 export const prismaPlugin = fp(async (fastify: FastifyInstance, opts: PluginOptions) => {
-
-  opts.maxTimeoutSeconds = opts.maxTimeoutSeconds ?? 610;
+  const maxTimeoutSeconds = opts.maxTimeoutSeconds ?? 120;
   let isConnected = false;
   const timeouts = { prev: 0, curr: 1, tmp: 0 };
 
@@ -30,7 +29,7 @@ export const prismaPlugin = fp(async (fastify: FastifyInstance, opts: PluginOpti
     });
   }
 
-  while (!isConnected && timeouts.curr <= opts.maxTimeoutSeconds) {
+  while (!isConnected) {
     try {
       await connect();
       isConnected = true;
@@ -39,9 +38,12 @@ export const prismaPlugin = fp(async (fastify: FastifyInstance, opts: PluginOpti
       opts.withLog && fastify.log.error('[PRISMA] <<< INIT ERROR >>>');
       opts.withLog && fastify.log.error(err);
       await new Promise(resolve => setTimeout(resolve, timeouts.curr * 1000));
-      timeouts.tmp = timeouts.curr;
-      timeouts.curr = timeouts.curr + timeouts.prev;
-      timeouts.prev = timeouts.tmp;
+
+      if (timeouts.curr < maxTimeoutSeconds) {
+        timeouts.tmp = timeouts.curr;
+        timeouts.curr = timeouts.curr + timeouts.prev;
+        timeouts.prev = timeouts.tmp;
+      }
     }
   }
 }, { name: 'prisma' });
