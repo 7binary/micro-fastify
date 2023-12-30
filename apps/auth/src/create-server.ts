@@ -1,4 +1,4 @@
-import path from 'path';
+import { join } from 'path';
 import Fastify, { FastifyInstance } from 'fastify';
 import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
 import autoload from '@fastify/autoload';
@@ -36,7 +36,7 @@ export const createServer = (): FastifyInstance => {
   fastify.register(prismaPlugin, { databaseUrl: env.DATABASE_URL, withLog: true });
   fastify.register(cookiePlugin, { secret: env.COOKIE_SECRET, domain: env.COOKIE_DOMAIN });
   fastify.register(registerServices);
-  fastify.register(autoload, { dir: path.join(__dirname, 'routes'), ignorePattern: /.*.test.ts/ });
+  fastify.register(autoload, { dir: join(__dirname, 'routes'), ignorePattern: /.*.test.ts/ });
 
   return fastify;
 };

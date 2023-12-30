@@ -1,4 +1,4 @@
-console.log('=> Client ENV', JSON.stringify({
+console.log('[CLIENT] ENV =>', JSON.stringify({
   PORT: process?.env?.PORT || 3000,
   NEXT_PUBLIC_API_URL: process?.env?.NEXT_PUBLIC_API_URL,
   SERVICE_PORTS: process?.env?.SERVICE_PORTS,
@@ -29,7 +29,7 @@ module.exports = {
       });
     }
 
-    console.log('=> Client REWERITES', rewrites);
+    console.log('[CLIENT] REWERITES =>', rewrites);
 
     return rewrites;
   },
