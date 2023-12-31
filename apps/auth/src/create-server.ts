@@ -9,6 +9,7 @@ import { env } from './env';
 import { authPlugin } from './plugins/auth.plugin';
 import { cookiePlugin } from './plugins/cookie.plugin';
 import { prismaPlugin } from './plugins/prisma.plugin';
+import { kafkaPlugin } from './plugins/kafka.plugin';
 import { registerServices } from './services';
 
 export const createServer = (): FastifyInstance => {
@@ -35,6 +36,7 @@ export const createServer = (): FastifyInstance => {
   fastify.register(authPlugin, { secret: env.JWT_SECRET });
   fastify.register(prismaPlugin, { databaseUrl: env.DATABASE_URL, withLog: true });
   fastify.register(cookiePlugin, { secret: env.COOKIE_SECRET, domain: env.COOKIE_DOMAIN });
+  fastify.register(kafkaPlugin, { brokers: env.KAFKA_BROKERS, withLog: true });
   fastify.register(registerServices);
   fastify.register(autoload, { dir: join(__dirname, 'routes'), ignorePattern: /.*.test.ts/ });
 

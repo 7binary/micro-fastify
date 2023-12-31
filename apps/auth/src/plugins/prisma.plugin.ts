@@ -24,7 +24,7 @@ export const prismaPlugin = fp(async (fastify: FastifyInstance, opts: PluginOpti
     await prisma.$connect();
     fastify.decorate('prisma', prisma);
     fastify.addHook('onClose', async (fastify) => {
-      await fastify.prisma.$disconnect();
+      await fastify.prisma?.$disconnect();
       isConnected = false;
     });
   }

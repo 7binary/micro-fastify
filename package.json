@@ -4,6 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "--- KAFKA ---": "------------------------------------------------------------------",
+    "dev:kafka": "pnpm kf",
+    "kf": "pnpm kf:stop || true && pnpm kf:zoo && sleep 3 && pnpm kf:run || pnpm kf:run",
+    "kf:stop": "/opt/homebrew/bin/zookeeper-server-stop || true && /opt/homebrew/bin/kafka-server-stop",
+    "kf:zoo": "/opt/homebrew/bin/zookeeper-server-start -daemon /opt/homebrew/etc/zookeeper/zoo.cfg",
+    "kf:run": "wait-on tcp:2181 && /opt/homebrew/bin/kafka-server-start -daemon /opt/homebrew/etc/kafka/server.properties",
+    "kf:ui": "docker run -it -d -p 8082:8080 -e DYNAMIC_CONFIG_ENABLED=true provectuslabs/kafka-ui",
+    "kf:docker": "docker compose -f ./infra/kafka-compose.yaml up --build --force-recreate --no-deps --detach",
     "--- KUBERNETES ---": "-------------------------------------------------------------",
     "k:ing-add": "kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.2/deploy/static/provider/cloud/deploy.yaml",
     "k:ing-check": "kubectl get pods --namespace=ingress-nginx",
@@ -42,5 +50,9 @@
     "eslint-plugin-import": "^2.28.1",
     "husky": "^8.0.3",
     "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "kafkajs": "^2.2.4",
+    "wait-on": "^7.2.0"
   }
 }

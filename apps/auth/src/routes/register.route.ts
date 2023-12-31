@@ -9,9 +9,12 @@ const registerRoute: FastifyPluginCallback = (fastify, opts, done) => {
     const user = await fastify.userService.register(request.body);
     const { accessToken, refreshToken } = fastify.auth.generateAuthTokens(user);
     await fastify.tokenService.saveRefreshToken(user.id, refreshToken);
+    const userJson = fastify.userService.toJson(user);
+
+    await fastify.kafkaService.newUserEmit(userJson);
 
     reply.setCookie('refreshToken', refreshToken).status(201).send({
-      user: fastify.userService.toJson(user),
+      user: userJson,
       accessToken,
     });
   });
