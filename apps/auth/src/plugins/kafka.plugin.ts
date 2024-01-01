@@ -8,7 +8,7 @@ declare module 'fastify' {
       instance: Kafka;
       producer: Producer;
       consumers: Map<string, Consumer>;
-      addConsumer: (params: AddConsumerParams) => Promise<Consumer>;
+      addConsumer: (params: AddConsumerParams) => Promise<Consumer | null>;
     };
   }
 }
@@ -44,7 +44,10 @@ export const kafkaPlugin = fp(async (fastify: FastifyInstance, opts: KafkaPlugin
     const producer = kafka.producer();
     await producer.connect();
 
-    const addConsumer = async (params: AddConsumerParams): Promise<Consumer> => {
+    const addConsumer = async (params: AddConsumerParams): Promise<Consumer | null> => {
+      if (!fastify.kafka.instance) {
+        return null;
+      }
       const { groupId, topic, eachMessage, fromBeginning } = params;
       const consumer = fastify.kafka.instance.consumer({ groupId: groupId || 'default' });
       await consumer.subscribe({ topic, fromBeginning });
