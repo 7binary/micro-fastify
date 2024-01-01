@@ -1,7 +1,7 @@
 import { FastifyInstance } from 'fastify';
 
 export enum KafkaTopics {
-  NEW_USER = 'new_user',
+  NEW_USER = 'new-user',
 }
 
 export class KafkaService {
@@ -24,9 +24,10 @@ export class KafkaService {
   async newUserEmit(userJson: Record<string, any>) {
     this.fastify.kafka && await this.fastify.kafka.producer.send({
       topic: KafkaTopics.NEW_USER,
-      messages: [
-        { value: JSON.stringify(userJson) },
-      ],
+      messages: [{
+        key: `new-user-${userJson.id}`,
+        value: JSON.stringify(userJson),
+      }],
     });
   }
 }

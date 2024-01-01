@@ -1,6 +1,6 @@
 import fp from 'fastify-plugin';
 import { FastifyInstance } from 'fastify';
-import { Consumer, Kafka, KafkaMessage, Producer } from 'kafkajs';
+import { Consumer, Kafka, KafkaMessage, Producer, Partitioners } from 'kafkajs';
 
 declare module 'fastify' {
   interface FastifyInstance {
@@ -38,10 +38,10 @@ export const kafkaPlugin = fp(async (fastify: FastifyInstance, opts: KafkaPlugin
 
   async function connect() {
     const kafka = new Kafka({
-      clientId: opts.clientId || 'kafka',
+      clientId: opts.clientId || 'micro-kafka',
       brokers: opts.brokers!,
     });
-    const producer = kafka.producer();
+    const producer = kafka.producer({ createPartitioner: Partitioners.DefaultPartitioner });
     await producer.connect();
 
     const addConsumer = async (params: AddConsumerParams): Promise<Consumer | null> => {
