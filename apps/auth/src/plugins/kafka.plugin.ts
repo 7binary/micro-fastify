@@ -1,6 +1,6 @@
 import fp from 'fastify-plugin';
 import { FastifyInstance } from 'fastify';
-import { Consumer, Kafka, KafkaMessage, Producer, Partitioners } from 'kafkajs';
+import { Consumer, Kafka, KafkaMessage, logLevel, Partitioners, Producer } from 'kafkajs';
 
 declare module 'fastify' {
   interface FastifyInstance {
@@ -36,7 +36,7 @@ export const kafkaPlugin = fp(async (fastify: FastifyInstance, opts: KafkaPlugin
   let isConnected = false;
   const timeouts = { prev: 0, curr: 1, tmp: 0 };
 
-  const metadataMaxAge = opts.metadataMaxAge ?? 3600000; // 1 hour
+  const metadataMaxAge = opts.metadataMaxAge ?? 3600000 * 96; // 96 hours = 4 days
   const maxTimeoutSeconds = opts.maxTimeoutSeconds ?? 120;
   const createPartitioner = Partitioners.DefaultPartitioner;
 
@@ -45,6 +45,7 @@ export const kafkaPlugin = fp(async (fastify: FastifyInstance, opts: KafkaPlugin
     const kafka = new Kafka({
       clientId: opts.clientId || 'micro-kafka',
       brokers: opts.brokers!,
+      logLevel: logLevel.ERROR,
     });
 
     // producer
@@ -106,7 +107,7 @@ export const kafkaPlugin = fp(async (fastify: FastifyInstance, opts: KafkaPlugin
       await connect();
       isConnected = true;
     } catch (err: any) {
-      opts.withLog && fastify.log.error(err, '[KAFKA] <<< INIT ERROR >>>');
+      fastify.log.error(err, '[KAFKA] <<< INIT ERROR >>>');
       await new Promise(resolve => setTimeout(resolve, timeouts.curr * 1000));
 
       if (timeouts.curr < maxTimeoutSeconds) {

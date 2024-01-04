@@ -1,5 +1,5 @@
-import Image from 'next/image';
 import Link from 'next/link';
+import { Logo } from './Logo';
 
 export const Footer = () => {
   return (
@@ -13,20 +13,7 @@ export const Footer = () => {
             <div className="w-full px-4 md:w-1/2 lg:w-4/12 xl:w-5/12">
               <div className="mb-12 max-w-[360px] lg:mb-16">
                 <Link href="/" className="mb-8 inline-block">
-                  <Image
-                    src="images/logo/logo-2.svg"
-                    alt="logo"
-                    className="w-full dark:hidden"
-                    width={140}
-                    height={30}
-                  />
-                  <Image
-                    src="images/logo/logo.svg"
-                    alt="logo"
-                    className="hidden w-full dark:block"
-                    width={140}
-                    height={30}
-                  />
+                  <Logo />
                 </Link>
                 <p className="mb-9 text-base font-medium leading-relaxed text-body-color">
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -208,8 +195,10 @@ export const Footer = () => {
         <div className="bg-primary/10 py-8">
           <div className="container">
             <p className="text-center text-base text-body-color dark:text-white">
-              Template by UIdeck and <a href="https://nextjstemplates.com" rel="nofollow noopener">Next.js
-              Templates</a>
+              <a href="https://zin.is" rel="nofollow noopener"
+                target="_blank" className="hover:underline">
+                <span className="text-xl">©</span> Copyright 2024 | Artem Zinovev
+              </a>
             </p>
           </div>
         </div>

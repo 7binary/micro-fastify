@@ -1,11 +1,11 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 import { User } from '@/types';
+import { Button } from '@/ui/buttons/Button';
 import menuData from './menuData';
 import ThemeToggler from './ThemeToggler';
-import { Button } from '@/ui/buttons/Button';
+import { Logo } from '../Logo';
 
 export const Header = ({ user }: {user: User | null}) => {
   // Navbar toggle
@@ -55,20 +55,7 @@ export const Header = ({ user }: {user: User | null}) => {
                   sticky ? 'py-5 lg:py-2' : 'py-8'
                 } `}
               >
-                <Image
-                  src="/images/logo/logo-2.svg"
-                  alt="logo"
-                  width={140}
-                  height={30}
-                  className="w-full dark:hidden"
-                />
-                <Image
-                  src="/images/logo/logo.svg"
-                  alt="logo"
-                  width={140}
-                  height={30}
-                  className="hidden w-full dark:block"
-                />
+                <Logo />
               </Link>
             </div>
             <div className="flex w-full items-center justify-between px-4">
