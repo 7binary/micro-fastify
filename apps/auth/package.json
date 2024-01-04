@@ -26,6 +26,7 @@
     "@fastify/error": "3.4.1",
     "@fastify/helmet": "11.1.1",
     "@fastify/jwt": "7.2.4",
+    "@fastify/rate-limit": "^9.1.0",
     "@fastify/type-provider-typebox": "4.0.0",
     "@prisma/client": "5.7.1",
     "@sinclair/typebox": "0.32.4",

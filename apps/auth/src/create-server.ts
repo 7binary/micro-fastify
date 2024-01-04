@@ -3,6 +3,7 @@ import Fastify, { FastifyInstance } from 'fastify';
 import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
 import autoload from '@fastify/autoload';
 import helmet from '@fastify/helmet';
+import rateLimit from '@fastify/rate-limit';
 import { errorHandlerPlugin } from 'fastify-common';
 
 import { env } from './env';
@@ -32,6 +33,7 @@ export const createServer = (): FastifyInstance => {
   }).withTypeProvider<TypeBoxTypeProvider>();
 
   fastify.register(errorHandlerPlugin, { withLog: true, withStack: env.NODE_ENV === 'test' });
+  fastify.register(rateLimit, { max: 150, timeWindow: '1 minute' });
   fastify.register(helmet);
   fastify.register(authPlugin, { secret: env.JWT_SECRET });
   fastify.register(prismaPlugin, { databaseUrl: env.DATABASE_URL, withLog: true });
