@@ -19,7 +19,7 @@ const meRoute: FastifyPluginCallback = (fastify, opts, done) => {
   fastify.get('/api/auth/me-optional', {
     onRequest: [fastify.auth.verifyOptional],
   }, async (request, reply) => {
-    if (request.user?.id) {
+    if (request.user) {
       const user = await fastify.userService.findOneById(request.user.id);
       if (user) {
         return reply.status(200).send({

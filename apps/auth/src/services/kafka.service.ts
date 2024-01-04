@@ -16,17 +16,20 @@ export class KafkaService {
       fromBeginning: true,
       eachMessage: async (message) => {
         const user = JSON.parse(message.value?.toString() || '{}');
-        this.fastify.log.info(user, '[KAFKA] NEW USER =>');
+        if (Number.isInteger(user.id)) {
+          this.fastify.log.info(user, '[KAFKA] NEW USER =>');
+        }
       },
     });
+    await this.newUserEmit();
   }
 
-  async newUserEmit(userJson: Record<string, any>) {
+  async newUserEmit(userJson: Record<string, any> = {}) {
     this.fastify.kafka && await this.fastify.kafka.producer.send({
       topic: KafkaTopics.NEW_USER,
       messages: [{
-        key: `new-user-${userJson.id}`,
-        value: JSON.stringify(userJson),
+        key: userJson?.id ? `new-user-${userJson.id}` : undefined,
+        value: this.fastify.userService.stringify(userJson),
       }],
     });
   }

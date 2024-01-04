@@ -1,12 +1,31 @@
 import { PrismaClient, User } from '@prisma/client';
 import { ValidationError } from 'fastify-common';
+import fastJson from 'fast-json-stringify';
 
 import { LoginDtoType } from '@/dto/login.dto';
 import { RegisterDtoType } from '@/dto/register.dto';
 import { HashService } from './hash.service';
 
 export class UserService {
-  constructor(private readonly prismaUser: PrismaClient['user']) {}
+
+  stringify: (model: Partial<User>) => string;
+
+  constructor(private readonly prismaUser: PrismaClient['user']) {
+    this.stringify = fastJson({
+      title: 'User Schema',
+      type: 'object',
+      properties: {
+        id: { type: 'integer' },
+        email: { type: 'string' },
+        fullName: { type: 'string', nullable: true },
+        gender: { type: 'string', nullable: true },
+      },
+    });
+  }
+
+  toJson(user: User): Partial<User> {
+    return exclude(user, ['passwordHash', 'passwordSalt', 'uuid', 'createdAt', 'updatedAt']);
+  }
 
   async findOneByEmail(email: string): Promise<User | null> {
     return this.prismaUser.findUnique({
@@ -18,10 +37,6 @@ export class UserService {
     return this.prismaUser.findUnique({
       where: { id },
     });
-  }
-
-  toJson(user: User) {
-    return exclude(user, ['passwordHash', 'passwordSalt', 'updatedAt']);
   }
 
   async login(dto: LoginDtoType): Promise<User> {
