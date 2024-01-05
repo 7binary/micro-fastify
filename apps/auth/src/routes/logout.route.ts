@@ -5,7 +5,7 @@ const logoutRoute: FastifyPluginCallback = (fastify, opts, done) => {
   fastify.get('/api/auth/logout', async (request, reply) => {
     const cookieRefreshToken = request.cookies?.refreshToken as string;
 
-    if (cookieRefreshToken && fastify.jwt.verify(cookieRefreshToken)) {
+    if (cookieRefreshToken) {
       await fastify.tokenService.removeRefreshToken(cookieRefreshToken);
     }
 

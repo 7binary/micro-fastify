@@ -24,7 +24,7 @@ export const RegisterForm = () => {
   const submit = handleSubmit(async (data) => {
     try {
       const authResponse = await authHttp.register(data);
-      await setAuthResponse(authResponse);
+      setAuthResponse(authResponse);
     } catch (err: any) {
       setErrorMessage(networkErrorHandler(err, setError));
     }

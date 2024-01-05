@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 
 import { User } from '@/types';
 import { Button } from '@/ui/buttons/Button';
-import menuData from './menuData';
-import ThemeToggler from './ThemeToggler';
+import { menuData } from './menuData';
+import { ThemeToggler } from './ThemeToggler';
 import { Logo } from '../Logo';
 
 export const Header = ({ user }: {user: User | null}) => {
@@ -92,7 +92,7 @@ export const Header = ({ user }: {user: User | null}) => {
                 >
                   <ul className="block lg:flex lg:space-x-12">
                     {menuData.map((menuItem, index) => (
-                      <li key={menuItem.id} className="group relative">
+                      <li key={`${menuItem.title}-${menuItem.path}`} className="group relative">
                         {menuItem.path ? (
                           <Link
                             href={menuItem.path}
@@ -124,7 +124,7 @@ export const Header = ({ user }: {user: User | null}) => {
                               {(menuItem.submenu || []).map((submenuItem) => (
                                 <Link
                                   href={submenuItem.path || ''}
-                                  key={submenuItem.id}
+                                  key={`${submenuItem.title}-${submenuItem.path}`}
                                   className="block rounded py-2.5 text-sm text-dark hover:opacity-70 dark:text-white lg:px-3"
                                 >
                                   {submenuItem.title}

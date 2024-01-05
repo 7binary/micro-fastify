@@ -4,10 +4,9 @@ import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
 import autoload from '@fastify/autoload';
 import helmet from '@fastify/helmet';
 import rateLimit from '@fastify/rate-limit';
-import { errorHandlerPlugin } from 'fastify-common';
+import { authPlugin, errorHandlerPlugin } from 'fastify-common';
 
 import { env } from './env';
-import { authPlugin } from './plugins/auth.plugin';
 import { cookiePlugin } from './plugins/cookie.plugin';
 import { prismaPlugin } from './plugins/prisma.plugin';
 import { kafkaPlugin } from './plugins/kafka.plugin';
@@ -38,8 +37,10 @@ export const createServer = (): FastifyInstance => {
   fastify.register(authPlugin, { secret: env.JWT_SECRET });
   fastify.register(prismaPlugin, { databaseUrl: env.DATABASE_URL, withLog: true });
   fastify.register(cookiePlugin, { secret: env.COOKIE_SECRET, domain: env.COOKIE_DOMAIN });
-  fastify.register(kafkaPlugin, { brokers: env.KAFKA_BROKERS, withLog: true });
   fastify.register(registerServices);
+  if (env.NODE_ENV !== 'test') {
+    fastify.register(kafkaPlugin, { brokers: env.KAFKA_BROKERS, withLog: true });
+  }
   fastify.register(autoload, { dir: join(__dirname, 'routes'), ignorePattern: /.*.test.ts/ });
 
   return fastify;

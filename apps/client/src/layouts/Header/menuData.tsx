@@ -1,90 +1,22 @@
 export type Menu = {
-  id: number;
   title: string;
   path?: string;
-  newTab: boolean;
+  newTab?: boolean;
   submenu?: Menu[];
 };
 
-const menuData: Menu[] = [
+export const menuData: Menu[] = [
+  { title: 'Home', path: '/' },
+  { title: 'About', path: '/about' },
+  { title: 'Blog', path: '/blog' },
+  { title: 'Support', path: '/contact' },
   {
-    id: 1,
-    title: 'Home',
-    path: '/',
-    newTab: false,
-  },
-  {
-    id: 2,
-    title: 'About',
-    path: '/about',
-    newTab: false,
-  },
-  {
-    id: 33,
-    title: 'Blog',
-    path: '/blog',
-    newTab: false,
-  },
-  {
-    id: 3,
-    title: 'Support',
-    path: '/contact',
-    newTab: false,
-  },
-  {
-    id: 4,
-    title: 'Pages',
-    newTab: false,
-    submenu: [
-      {
-        id: 41,
-        title: 'About Page',
-        path: '/about',
-        newTab: false,
-      },
-      {
-        id: 42,
-        title: 'Contact Page',
-        path: '/contact',
-        newTab: false,
-      },
-      {
-        id: 43,
-        title: 'Blog Grid Page',
-        path: '/blog',
-        newTab: false,
-      },
-      {
-        id: 44,
-        title: 'Blog Sidebar Page',
-        path: '/blog-sidebar',
-        newTab: false,
-      },
-      {
-        id: 45,
-        title: 'Blog Details Page',
-        path: '/blog-details',
-        newTab: false,
-      },
-      {
-        id: 46,
-        title: 'Sign In Page',
-        path: '/signin',
-        newTab: false,
-      },
-      {
-        id: 47,
-        title: 'Sign Up Page',
-        path: '/signup',
-        newTab: false,
-      },
-      {
-        id: 48,
-        title: 'Error Page',
-        path: '/error',
-        newTab: false,
-      },
+    title: 'Pages', submenu: [
+      { title: 'About Page', path: '/about' },
+      { title: 'Contact Page', path: '/contact' },
+      { title: 'Blog Grid Page', path: '/blog' },
+      { title: 'Sign In Page', path: '/signin' },
+      { title: 'Sign Up Page', path: '/signup' },
     ],
   },
 ];
-export default menuData;
