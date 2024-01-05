@@ -19,6 +19,7 @@ interface KafkaPluginOptions {
   metadataMaxAge?: number;
   maxTimeoutSeconds?: number;
   withLog?: boolean;
+  inactive?: boolean;
 }
 
 interface AddConsumerParams {
@@ -26,9 +27,13 @@ interface AddConsumerParams {
   eachMessage?: (message: KafkaMessage) => Promise<void>;
   groupId?: string;
   fromBeginning?: boolean;
+  onConnect?: () => Promise<void>;
 }
 
 export const kafkaPlugin = fp(async (fastify: FastifyInstance, opts: KafkaPluginOptions) => {
+  if (opts.inactive) {
+    return;
+  }
   if (!Array.isArray(opts.brokers) || !opts.brokers[0]) {
     return;
   }
@@ -64,7 +69,7 @@ export const kafkaPlugin = fp(async (fastify: FastifyInstance, opts: KafkaPlugin
         return null;
       }
 
-      const { groupId, topic, eachMessage, fromBeginning } = params;
+      const { groupId, topic, eachMessage, fromBeginning, onConnect } = params;
       const consumer = fastify.kafka.instance.consumer({ groupId: groupId || 'default' });
       await consumer.subscribe({ topic, fromBeginning });
       eachMessage && await consumer.run({
@@ -75,6 +80,7 @@ export const kafkaPlugin = fp(async (fastify: FastifyInstance, opts: KafkaPlugin
         await fastify.kafka.consumers.get(topic)!.disconnect();
       }
       fastify.kafka.consumers.set(topic, consumer);
+      onConnect && await onConnect();
 
       return consumer;
     };
@@ -107,7 +113,7 @@ export const kafkaPlugin = fp(async (fastify: FastifyInstance, opts: KafkaPlugin
       await connect();
       isConnected = true;
     } catch (err: any) {
-      fastify.log.error(err, '[KAFKA] <<< INIT ERROR >>>');
+      opts.withLog && fastify.log.error(err, '[KAFKA] <<< INIT ERROR >>>');
       await new Promise(resolve => setTimeout(resolve, timeouts.curr * 1000));
 
       if (timeouts.curr < maxTimeoutSeconds) {

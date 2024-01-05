@@ -36,7 +36,7 @@
     "env-var": "7.4.1",
     "fast-json-stringify": "5.9.2",
     "fastify": "4.25.2",
-    "fastify-common": "1.15.1",
+    "fastify-common": "1.15.2",
     "fastify-plugin": "4.5.1",
     "kafkajs": "2.2.4",
     "prisma": "5.7.1"

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "--- KAFKA ---": "------------------------------------------------------------------",
-    "kafka": "docker compose -f ./infra/kafka-compose.yaml up --build --force-recreate --no-deps --detach",
+    "kafka:compose": "docker compose -f ./infra/kafka-compose.yaml up --build --force-recreate --no-deps --detach",
     "--- KUBERNETES ---": "-------------------------------------------------------------",
     "k:ing-add": "kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.2/deploy/static/provider/cloud/deploy.yaml",
     "k:ing-check": "kubectl get pods --namespace=ingress-nginx",

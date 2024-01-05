@@ -11,7 +11,7 @@ export class KafkaService {
   }
 
   async newUserConsume() {
-    this.fastify.kafka && await this.fastify.kafka.addConsumer({
+    await this.fastify.kafka?.addConsumer({
       topic: KafkaTopics.NEW_USER,
       fromBeginning: true,
       eachMessage: async (message) => {
@@ -20,12 +20,12 @@ export class KafkaService {
           this.fastify.log.info(user, '[KAFKA] NEW USER =>');
         }
       },
+      onConnect: async () => this.newUserEmit({}),
     });
-    await this.newUserEmit({});
   }
 
   async newUserEmit(userJson: Record<string, any>) {
-    this.fastify.kafka && await this.fastify.kafka.producer.send({
+    await this.fastify.kafka?.producer.send({
       topic: KafkaTopics.NEW_USER,
       messages: [{
         key: userJson?.id ? `new-user-${userJson.id}` : undefined,

@@ -31,6 +31,11 @@ export const createServer = (): FastifyInstance => {
     pluginTimeout: 99000,
   }).withTypeProvider<TypeBoxTypeProvider>();
 
+  fastify.register(kafkaPlugin, {
+    brokers: env.KAFKA_BROKERS,
+    withLog: true,
+    inactive: env.NODE_ENV === 'test'
+  });
   fastify.register(errorHandlerPlugin, { withLog: true, withStack: env.NODE_ENV === 'test' });
   fastify.register(rateLimit, { max: 150, timeWindow: '1 minute' });
   fastify.register(helmet);
@@ -38,9 +43,6 @@ export const createServer = (): FastifyInstance => {
   fastify.register(prismaPlugin, { databaseUrl: env.DATABASE_URL, withLog: true });
   fastify.register(cookiePlugin, { secret: env.COOKIE_SECRET, domain: env.COOKIE_DOMAIN });
   fastify.register(registerServices);
-  if (env.NODE_ENV !== 'test') {
-    fastify.register(kafkaPlugin, { brokers: env.KAFKA_BROKERS, withLog: true });
-  }
   fastify.register(autoload, { dir: join(__dirname, 'routes'), ignorePattern: /.*.test.ts/ });
 
   return fastify;

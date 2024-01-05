@@ -29,6 +29,8 @@ spec:
                 secretKeyRef:
                   name: domain
                   key: DOMAIN
+            - name: KAFKA_BROKERS
+              value: 'kafka-service:9092'
 ---
 apiVersion: v1
 kind: Service

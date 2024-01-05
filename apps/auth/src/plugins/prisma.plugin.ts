@@ -35,8 +35,7 @@ export const prismaPlugin = fp(async (fastify: FastifyInstance, opts: PluginOpti
       isConnected = true;
       opts.withLog && fastify.log.info(`[PRISMA] CONNECTED => ${opts.databaseUrl}`);
     } catch (err: any) {
-      opts.withLog && fastify.log.error('[PRISMA] <<< INIT ERROR >>>');
-      opts.withLog && fastify.log.error(err);
+      fastify.log.error(err, '[PRISMA] <<< INIT ERROR >>>');
       await new Promise(resolve => setTimeout(resolve, timeouts.curr * 1000));
 
       if (timeouts.curr < maxTimeoutSeconds) {

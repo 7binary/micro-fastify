@@ -51,8 +51,8 @@ dependencies:
     specifier: 4.25.2
     version: 4.25.2
   fastify-common:
-    specifier: 1.15.1
-    version: 1.15.1
+    specifier: 1.15.2
+    version: 1.15.2
   fastify-plugin:
     specifier: 4.5.1
     version: 4.5.1
@@ -1647,8 +1647,8 @@ packages:
       reusify: 1.0.4
     dev: false
 
-  /fastify-common@1.15.1:
-    resolution: {integrity: sha512-lf9hKyem80H6nBjA9kA80b5hDNDO3oDA0sG5uHnTSbq2NK+WtF9wnXfUlXllt7dvYVumK9AofC8UKsNnQF5gxg==}
+  /fastify-common@1.15.2:
+    resolution: {integrity: sha512-Xb+F4JJAsWrHT7+u7G2zdZNboEqxcVS/MHZGHh+Wr4OtBDcNYustWD19WfjDVodBumBFi1KWn9KcFAvkManMFA==}
     dependencies:
       '@fastify/error': 3.4.1
       '@fastify/jwt': 7.2.4
