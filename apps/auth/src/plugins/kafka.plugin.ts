@@ -31,10 +31,7 @@ interface AddConsumerParams {
 }
 
 export const kafkaPlugin = fp(async (fastify: FastifyInstance, opts: KafkaPluginOptions) => {
-  if (opts.inactive) {
-    return;
-  }
-  if (!Array.isArray(opts.brokers) || !opts.brokers[0]) {
+  if (opts.inactive || !Array.isArray(opts.brokers) || !opts.brokers[0]) {
     return;
   }
 
@@ -113,7 +110,7 @@ export const kafkaPlugin = fp(async (fastify: FastifyInstance, opts: KafkaPlugin
       await connect();
       isConnected = true;
     } catch (err: any) {
-      opts.withLog && fastify.log.error(err, '[KAFKA] <<< INIT ERROR >>>');
+      fastify.log.error(err, '[KAFKA] <<< INIT ERROR >>>');
       await new Promise(resolve => setTimeout(resolve, timeouts.curr * 1000));
 
       if (timeouts.curr < maxTimeoutSeconds) {

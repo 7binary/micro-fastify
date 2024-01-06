@@ -33,6 +33,7 @@ services:
       KAFKA_JMX_PORT: 9997
       KAFKA_JMX_HOSTNAME: kafka
 
+  # UI Cluster Host: PLAINTEXT://kafka | UI Cluster Port: 29092
   kafka-ui:
     container_name: kafka-ui
     image: provectuslabs/kafka-ui:latest

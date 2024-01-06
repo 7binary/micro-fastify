@@ -13,13 +13,14 @@ import { kafkaPlugin } from './plugins/kafka.plugin';
 import { registerServices } from './services';
 
 export const createServer = (): FastifyInstance => {
+  const isTest = env.NODE_ENV === 'test';
   const fastify = Fastify({
     trustProxy: true,
     ajv: {
       customOptions: { allErrors: true },
       plugins: [require('ajv-errors')],
     },
-    logger: env.NODE_ENV === 'production' ? true : env.NODE_ENV === 'test' ? false : {
+    logger: env.NODE_ENV === 'production' ? true : isTest ? false : {
       transport: {
         target: 'pino-pretty',
         options: {
@@ -31,12 +32,8 @@ export const createServer = (): FastifyInstance => {
     pluginTimeout: 99000,
   }).withTypeProvider<TypeBoxTypeProvider>();
 
-  fastify.register(kafkaPlugin, {
-    brokers: env.KAFKA_BROKERS,
-    withLog: true,
-    inactive: env.NODE_ENV === 'test'
-  });
-  fastify.register(errorHandlerPlugin, { withLog: true, withStack: env.NODE_ENV === 'test' });
+  fastify.register(kafkaPlugin, { brokers: env.KAFKA_BROKERS, withLog: true, inactive: isTest });
+  fastify.register(errorHandlerPlugin, { withLog: true, withStack: isTest });
   fastify.register(rateLimit, { max: 150, timeWindow: '1 minute' });
   fastify.register(helmet);
   fastify.register(authPlugin, { secret: env.JWT_SECRET });
