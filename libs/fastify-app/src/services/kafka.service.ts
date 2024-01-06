@@ -20,7 +20,7 @@ export class KafkaService {
           this.fastify.log.info(user, '[KAFKA] NEW USER =>');
         }
       },
-      onConnect: () => this.newUserEmit({}),
+      onConnect: async () => this.newUserEmit({}),
     });
   }
 

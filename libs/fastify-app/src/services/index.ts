@@ -21,4 +21,4 @@ export const registerServices = fp(async (fastify: FastifyInstance) => {
   fastify.decorate('userService', new UserService(fastify.prisma.user));
   fastify.decorate('tokenService', new TokenService(fastify.prisma.token));
   fastify.decorate('kafkaService', new KafkaService(fastify));
-}, { dependencies: ['prisma', 'kafka'] });
+}, { dependencies: ['kafka'] });

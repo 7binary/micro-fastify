@@ -6,14 +6,11 @@ const refreshRoute: FastifyPluginCallback = (fastify, opts, done) => {
   fastify.get('/api/auth/refresh', {
     onRequest: [fastify.auth.verifyCookie],
   }, async (request, reply) => {
-    const tokenModel = await fastify.tokenService
-      .findRefreshToken(request.cookies.refreshToken!);
-    if (!tokenModel) {
-      throw new NotAuthorizedError();
-    }
-
-    const user = await fastify.userService.findOneById(request.user.id);
-    if (!user) {
+    const [tokenModel, user] = await Promise.all([
+      fastify.tokenService.findRefreshToken(request.cookies.refreshToken!),
+      fastify.userService.findOneById(request.user.id),
+    ]);
+    if (!tokenModel || !user) {
       throw new NotAuthorizedError();
     }
 

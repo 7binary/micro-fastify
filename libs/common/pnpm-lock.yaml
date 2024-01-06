@@ -17,6 +17,9 @@ dependencies:
   fastify-plugin:
     specifier: ^4.5.1
     version: 4.5.1
+  kafkajs:
+    specifier: ^2.2.4
+    version: 2.2.4
 
 devDependencies:
   '@types/node':
@@ -901,6 +904,11 @@ packages:
 
   /json-schema-traverse@1.0.0:
     resolution: {integrity: sha512-NM8/P9n3XjXhIZn1lLhkFaACTOURQXjWhV4BA/RnOv8xvgqtqpAX9IO4mRQxSx1Rlo4tqzeqb0sOlruaOy3dug==}
+    dev: false
+
+  /kafkajs@2.2.4:
+    resolution: {integrity: sha512-j/YeapB1vfPT2iOIUn/vxdyKEuhuY2PxMBvf5JWux6iSaukAccrMtXEY/Lb7OvavDhOWME589bpLrEdnVHjfjA==}
+    engines: {node: '>=14.0.0'}
     dev: false
 
   /kind-of@6.0.3:

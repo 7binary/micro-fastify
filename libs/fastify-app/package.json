@@ -1,5 +1,5 @@
 {
-  "name": "auth",
+  "name": "fastify-app",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -22,16 +22,13 @@
   "license": "ISC",
   "dependencies": {
     "@fastify/autoload": "5.8.0",
-    "@fastify/cookie": "9.2.0",
     "@fastify/error": "3.4.1",
     "@fastify/helmet": "11.1.1",
-    "@fastify/jwt": "7.2.4",
     "@fastify/rate-limit": "9.1.0",
     "@fastify/type-provider-typebox": "4.0.0",
     "@prisma/client": "5.7.1",
     "@sinclair/typebox": "0.32.4",
     "ajv-errors": "3.0.0",
-    "bcryptjs": "2.4.3",
     "dotenv": "16.3.1",
     "env-var": "7.4.1",
     "fast-json-stringify": "5.9.2",
@@ -41,7 +38,6 @@
     "prisma": "5.7.1"
   },
   "devDependencies": {
-    "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20.9.2",
     "@types/tap": "^15.0.11",
     "pino-pretty": "^10.2.3",

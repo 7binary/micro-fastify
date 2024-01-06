@@ -7,7 +7,6 @@ import rateLimit from '@fastify/rate-limit';
 import { errorHandlerPlugin, authPlugin, kafkaPlugin } from 'fastify-common';
 
 import { env } from './env';
-import { cookiePlugin } from './plugins/cookie.plugin';
 import { prismaPlugin } from './plugins/prisma.plugin';
 import { registerServices } from './services';
 
@@ -37,7 +36,6 @@ export const createServer = (): FastifyInstance => {
   fastify.register(authPlugin, { secret: env.JWT_SECRET });
   fastify.register(prismaPlugin, { databaseUrl: env.DATABASE_URL, withLog: true });
   fastify.register(kafkaPlugin, { brokers: env.KAFKA_BROKERS, withLog: true, inactive: isTest });
-  fastify.register(cookiePlugin, { secret: env.COOKIE_SECRET, domain: env.COOKIE_DOMAIN });
   fastify.register(registerServices);
   fastify.register(autoload, { dir: join(__dirname, 'routes'), ignorePattern: /.*.test.ts/ });
 

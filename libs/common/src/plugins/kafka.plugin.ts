@@ -9,7 +9,7 @@ declare module 'fastify' {
       producer: Producer;
       consumers: Map<string, Consumer>;
       addConsumer: (params: AddConsumerParams) => Promise<Consumer | null>;
-    };
+    } | undefined;
   }
 }
 
@@ -38,15 +38,37 @@ export const kafkaPlugin = fp(async (fastify: FastifyInstance, opts: KafkaPlugin
   let isConnected = false;
   const timeouts = { prev: 0, curr: 1, tmp: 0 };
 
-  const metadataMaxAge = opts.metadataMaxAge ?? 3600000 * 96; // 96 hours = 4 days
-  const maxTimeoutSeconds = opts.maxTimeoutSeconds ?? 120;
+  const metadataMaxAge = opts.metadataMaxAge || 3600000 * 96; // 96 hours = 4 days
+  const maxTimeoutSeconds = opts.maxTimeoutSeconds || 120;
   const createPartitioner = Partitioners.DefaultPartitioner;
 
+  // Kafka consumer creation
+  const addConsumer = async (params: AddConsumerParams): Promise<Consumer | null> => {
+    if (!fastify.kafka) {
+      return null;
+    }
+
+    const { groupId, topic, eachMessage, fromBeginning, onConnect } = params;
+    const consumer = fastify.kafka.instance.consumer({ groupId: groupId || 'default' });
+    await consumer.subscribe({ topic, fromBeginning });
+    eachMessage && await consumer.run({
+      eachMessage: async ({ message }) => eachMessage(message),
+    });
+
+    if (fastify.kafka.consumers.has(topic)) {
+      await fastify.kafka.consumers.get(topic)!.disconnect();
+    }
+    fastify.kafka.consumers.set(topic, consumer);
+    onConnect && await onConnect();
+
+    return consumer;
+  };
+
+  // Kafka connect with producer creation
   async function connect() {
-    // instance
     const kafka = new Kafka({
-      clientId: opts.clientId || 'micro-kafka',
-      brokers: opts.brokers!,
+      clientId: opts.clientId ?? 'micro-kafka',
+      brokers: opts.brokers,
       logLevel: logLevel.ERROR,
     });
 
@@ -59,28 +81,6 @@ export const kafkaPlugin = fp(async (fastify: FastifyInstance, opts: KafkaPlugin
       opts.withLog && fastify.log.error('[KAFKA] producer.disconnect');
     });
     await producer.connect();
-
-    // consumer creation
-    const addConsumer = async (params: AddConsumerParams): Promise<Consumer | null> => {
-      if (!fastify.kafka.instance) {
-        return null;
-      }
-
-      const { groupId, topic, eachMessage, fromBeginning, onConnect } = params;
-      const consumer = fastify.kafka.instance.consumer({ groupId: groupId || 'default' });
-      await consumer.subscribe({ topic, fromBeginning });
-      eachMessage && await consumer.run({
-        eachMessage: async ({ message }) => eachMessage(message),
-      });
-
-      if (fastify.kafka.consumers.has(topic)) {
-        await fastify.kafka.consumers.get(topic)!.disconnect();
-      }
-      fastify.kafka.consumers.set(topic, consumer);
-      onConnect && await onConnect();
-
-      return consumer;
-    };
 
     // decorator export
     fastify.decorate('kafka', {
