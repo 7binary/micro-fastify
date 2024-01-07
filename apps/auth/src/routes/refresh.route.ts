@@ -8,7 +8,7 @@ const refreshRoute: FastifyPluginCallback = (fastify, opts, done) => {
   }, async (request, reply) => {
     const [tokenModel, user] = await Promise.all([
       fastify.tokenService.findRefreshToken(request.cookies.refreshToken!),
-      fastify.userService.findOneById(request.user.id),
+      fastify.userService.findOneById(request.user!.id),
     ]);
     if (!tokenModel || !user) {
       throw new NotAuthorizedError();

@@ -1,0 +1,9 @@
+.env
+.DS_Store
+.idea
+.nyc_output
+.tap
+
+build
+node_modules
+tsconfig.tsbuildinfo

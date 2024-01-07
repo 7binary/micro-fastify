@@ -6,7 +6,7 @@ const meRoute: FastifyPluginCallback = (fastify, opts, done) => {
   fastify.get('/api/auth/me', {
     onRequest: [fastify.auth.verify],
   }, async (request, reply) => {
-    const user = await fastify.userService.findOneById(request.user.id);
+    const user = await fastify.userService.findOneById(request.user!.id);
     if (!user) {
       throw new NotAuthorizedError();
     }

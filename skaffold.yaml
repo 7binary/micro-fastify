@@ -19,6 +19,14 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
+    - image: zineof/f-tickets
+      context: apps/tickets
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
     - image: zineof/f-client
       context: apps/client
       docker:

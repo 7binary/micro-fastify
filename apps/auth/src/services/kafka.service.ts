@@ -28,7 +28,7 @@ export class KafkaService {
     await this.fastify.kafka?.producer.send({
       topic: KafkaTopics.NEW_USER,
       messages: [{
-        key: userJson?.id ? `new-user-${userJson.id}` : undefined,
+        key: null,
         value: this.fastify.userService.stringify(userJson),
       }],
     });

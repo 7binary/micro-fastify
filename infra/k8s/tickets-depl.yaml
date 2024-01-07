@@ -2,20 +2,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth-depl
+  name: tickets-depl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: auth
+      app: tickets
   template:
     metadata:
       labels:
-        app: auth
+        app: tickets
     spec:
       containers:
         - name: auth
-          image: zineof/f-auth
+          image: zineof/f-tickets
           env:
             - name: JWT_SECRET
               valueFrom:
@@ -23,7 +23,7 @@ spec:
                   name: jwt-secret
                   key: JWT_SECRET
             - name: DATABASE_URL
-              value: 'postgresql://postgres:postgres@auth-pg-srv/db?schema=public'
+              value: 'postgresql://postgres:postgres@tickets-pg-srv/db?schema=public'
             - name: COOKIE_DOMAIN
               valueFrom:
                 secretKeyRef:
@@ -35,10 +35,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: auth-srv
+  name: tickets-srv
 spec:
   selector:
-    app: auth
+    app: tickets
   ports:
     - port: 3000
       targetPort: 3000

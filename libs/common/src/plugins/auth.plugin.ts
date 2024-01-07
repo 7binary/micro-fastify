@@ -18,12 +18,16 @@ declare module 'fastify' {
       verifyCookie: (request: FastifyRequest, reply: FastifyReply) => Promise<void>;
     };
   }
+
+  interface FastifyRequest {
+    user: JwtPayload | null;
+  }
 }
 
 declare module '@fastify/jwt' {
   interface FastifyJWT {
     payload: JwtPayload;
-    user: JwtPayload;
+    user: JwtPayload | null;
   }
 }
 

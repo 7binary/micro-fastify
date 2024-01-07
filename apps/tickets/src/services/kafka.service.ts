@@ -1,7 +1,7 @@
 import { FastifyInstance } from 'fastify';
 
 export enum KafkaTopics {
-  NEW_USER = 'new-user',
+  NEW_TICKET = 'new-ticket',
 }
 
 export class KafkaService {
@@ -12,24 +12,24 @@ export class KafkaService {
 
   async newUserConsume() {
     await this.fastify.kafka?.addConsumer({
-      topic: KafkaTopics.NEW_USER,
+      topic: KafkaTopics.NEW_TICKET,
       fromBeginning: true,
       eachMessage: async (message) => {
-        const user = JSON.parse(message.value?.toString() || '{}');
-        if (Number.isInteger(user?.id)) {
-          this.fastify.log.info(user, '[KAFKA] NEW USER =>');
+        const ticket = JSON.parse(message.value?.toString() || '{}');
+        if (Number.isInteger(ticket?.id)) {
+          this.fastify.log.info(ticket, '[KAFKA] NEW TICKET =>');
         }
       },
       onConnect: async () => this.newUserEmit({}),
     });
   }
 
-  async newUserEmit(userJson: Record<string, any>) {
+  async newUserEmit(jsonRecord: Record<string, any>) {
     await this.fastify.kafka?.producer.send({
-      topic: KafkaTopics.NEW_USER,
+      topic: KafkaTopics.NEW_TICKET,
       messages: [{
         key: null,
-        value: this.fastify.userService.stringify(userJson),
+        value: JSON.stringify(jsonRecord),
       }],
     });
   }

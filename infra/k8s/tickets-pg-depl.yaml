@@ -1,0 +1,61 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tickets-pg-depl
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: tickets-pg
+  template:
+    metadata:
+      labels:
+        app: tickets-pg
+    spec:
+      containers:
+        - name: tickets-pg
+          image: postgres:14
+          env:
+            - name: POSTGRES_DB
+              value: 'db'
+            - name: POSTGRES_USER
+              value: 'postgres'
+            - name: POSTGRES_PASSWORD
+              value: 'postgres'
+          volumeMounts:
+            - name: tickets-pg-pvc
+              readOnly: false
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: tickets-pg-pvc
+          persistentVolumeClaim:
+            claimName: tickets-pg-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tickets-pg-srv
+  labels:
+    app: tickets-pg
+spec:
+  selector:
+    app: tickets-pg
+  ports:
+    - port: 5432
+      targetPort: 5432
+      protocol: TCP
+      name: db
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: tickets-pg-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100M

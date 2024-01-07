@@ -11,10 +11,6 @@ declare module 'fastify' {
     tokenService: TokenService;
     kafkaService: KafkaService;
   }
-
-  interface FastifyRequest {
-    user: {id: number};
-  }
 }
 
 export const registerServices = fp(async (fastify: FastifyInstance) => {

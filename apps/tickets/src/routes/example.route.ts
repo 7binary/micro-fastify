@@ -3,11 +3,11 @@ import { ExampleDto, ExampleDtoType } from '@/dto/example.dto';
 
 const exampleRoute: FastifyPluginCallback = (fastify, opts, done) => {
 
-  fastify.post<{Body: ExampleDtoType}>('/api/fastify-app/example', {
+  fastify.post<{Body: ExampleDtoType}>('/api/tickets/example', {
     onRequest: [fastify.auth.verify],
     schema: { body: ExampleDto },
   }, async (request, reply) => {
-    reply.status(201).send('Created');
+    reply.status(200).send('OK');
   });
 
   done();
