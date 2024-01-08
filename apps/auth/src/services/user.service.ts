@@ -24,7 +24,15 @@ export class UserService {
   }
 
   toJson(user: User): Partial<User> {
-    return exclude(user, ['passwordHash', 'passwordSalt', 'uuid', 'createdAt', 'updatedAt']);
+    return this.exclude(user, ['passwordHash', 'passwordSalt', 'uuid', 'createdAt', 'updatedAt']);
+  }
+
+  exclude<User, Key extends keyof User>(model: User, keys: Key[]): Omit<User, Key> {
+    for (const key of keys) {
+      delete model[key];
+    }
+
+    return model;
   }
 
   async findOneByEmail(email: string): Promise<User | null> {
@@ -74,12 +82,4 @@ export class UserService {
 
     return user;
   }
-}
-
-function exclude<User, Key extends keyof User>(model: User, keys: Key[]): Omit<User, Key> {
-  for (const key of keys) {
-    delete model[key];
-  }
-
-  return model;
 }

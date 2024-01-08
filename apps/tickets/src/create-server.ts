@@ -30,7 +30,7 @@ export const createServer = (): FastifyInstance => {
     pluginTimeout: 99000,
   }).withTypeProvider<TypeBoxTypeProvider>();
 
-  fastify.register(errorHandlerPlugin, { withLog: true, withStack: isTest });
+  fastify.register(errorHandlerPlugin, { withLog: true, withStack: true });
   fastify.register(rateLimit, { max: 150, timeWindow: '1 minute' });
   fastify.register(helmet);
   fastify.register(authPlugin, { secret: env.JWT_SECRET });

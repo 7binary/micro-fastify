@@ -42,10 +42,10 @@ export const authPlugin = fp(async (fastify: FastifyInstance, opts: PluginOption
 
   fastify.register(jwt, {
     secret: opts.secret,
-    cookie: {
-      cookieName: opts.cookieName || 'refreshToken',
+    cookie: opts.cookieName ? {
+      cookieName: opts.cookieName,
       signed: false,
-    },
+    } : undefined,
   });
 
   const generateAuthTokens = (payload: JwtPayload): AuthTokens => {

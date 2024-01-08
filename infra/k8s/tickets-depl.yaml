@@ -24,11 +24,6 @@ spec:
                   key: JWT_SECRET
             - name: DATABASE_URL
               value: 'postgresql://postgres:postgres@tickets-pg-srv/db?schema=public'
-            - name: COOKIE_DOMAIN
-              valueFrom:
-                secretKeyRef:
-                  name: domain
-                  key: DOMAIN
             - name: KAFKA_BROKERS
               value: 'kafka-service:9092'
 ---

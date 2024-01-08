@@ -7,7 +7,7 @@ declare module 'fastify' {
     kafka: {
       instance: Kafka;
       producer: Producer;
-      consumers: Map<string, Consumer>;
+      consumers: Record<string, Consumer[]>;
       addConsumer: (params: AddConsumerParams) => Promise<Consumer | null>;
     } | undefined;
   }
@@ -27,6 +27,7 @@ interface AddConsumerParams {
   eachMessage?: (message: KafkaMessage) => Promise<void>;
   groupId?: string;
   fromBeginning?: boolean;
+  partitionsConsumedConcurrently?: number;
   onConnect?: () => Promise<void>;
 }
 
@@ -52,13 +53,14 @@ export const kafkaPlugin = fp(async (fastify: FastifyInstance, opts: KafkaPlugin
     const consumer = fastify.kafka.instance.consumer({ groupId: groupId || 'default' });
     await consumer.subscribe({ topic, fromBeginning });
     eachMessage && await consumer.run({
+      partitionsConsumedConcurrently: params.partitionsConsumedConcurrently || 1,
       eachMessage: async ({ message }) => eachMessage(message),
     });
 
-    if (fastify.kafka.consumers.has(topic)) {
-      await fastify.kafka.consumers.get(topic)!.disconnect();
+    if (!fastify.kafka.consumers[topic]) {
+      fastify.kafka.consumers[topic] = [];
     }
-    fastify.kafka.consumers.set(topic, consumer);
+    fastify.kafka.consumers[topic].push(consumer);
     onConnect && await onConnect();
 
     return consumer;
@@ -86,7 +88,7 @@ export const kafkaPlugin = fp(async (fastify: FastifyInstance, opts: KafkaPlugin
     fastify.decorate('kafka', {
       instance: kafka,
       producer,
-      consumers: new Map(),
+      consumers: {},
       addConsumer,
     });
 
@@ -96,10 +98,15 @@ export const kafkaPlugin = fp(async (fastify: FastifyInstance, opts: KafkaPlugin
         return;
       }
       await fastify.kafka.producer.disconnect();
-      const consumers = fastify.kafka.consumers;
-      if (consumers.size > 0) {
-        await Promise.all(Array.from(consumers.values()).map(con => con.disconnect()));
+
+      let consumers: Consumer[] = [];
+      for (const [_, topicConsumers] of Object.entries(fastify.kafka.consumers)) {
+        consumers = [...consumers, ...topicConsumers];
       }
+      if (consumers.length > 0) {
+        await Promise.all(consumers.map(con => con.disconnect()));
+      }
+
       isConnected = false;
     });
   }

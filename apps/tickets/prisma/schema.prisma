@@ -7,25 +7,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id       Int      @id @default(autoincrement())
-  email    String   @unique
-  fullName String?
-  gender   String?
-  Tickets  Ticket[]
-
-  @@map("user")
-}
-
 model Ticket {
-  id        Int       @id @default(autoincrement())
-  title     String
-  price     BigInt
-  soldAt    DateTime?
-  userId    Int?
-  User      User?     @relation(fields: [userId], references: [id])
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id           Int       @id @default(autoincrement())
+  title        String
+  price        Decimal   @db.Money
+  soldAt       DateTime?
+  authorUserId Int?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
 
   @@map("ticket")
 }

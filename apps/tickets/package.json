@@ -12,6 +12,7 @@
     "test:reset": "export $(cat .env.test | xargs) && prisma migrate reset --force",
     "test:run": "export $(cat .env.test | xargs) && tap --reporter=base --disable-coverage --comments src/**/*.test.ts; exit 0",
     "prisma:add": "prisma migrate dev --name",
+    "prisma:dev": "prisma migrate dev",
     "prisma:deploy": "prisma migrate deploy",
     "prisma:generate": "prisma generate",
     "prisma:studio": "prisma studio",
@@ -33,7 +34,7 @@
     "env-var": "7.4.1",
     "fast-json-stringify": "5.9.2",
     "fastify": "4.25.2",
-    "fastify-common": "1.16.1",
+    "fastify-common": "1.17.0",
     "fastify-plugin": "4.5.1",
     "prisma": "5.7.1"
   },

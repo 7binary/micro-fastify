@@ -7,7 +7,7 @@ const registerRoute: FastifyPluginCallback = (fastify, opts, done) => {
     schema: { body: RegisterDto },
   }, async (request, reply) => {
     const user = await fastify.userService.register(request.body);
-    const { accessToken, refreshToken } = fastify.auth.generateAuthTokens(user);
+    const { accessToken, refreshToken } = fastify.auth.generateAuthTokens({ id: user.id });
     await fastify.tokenService.saveRefreshToken(user.id, refreshToken);
     const userJson = fastify.userService.toJson(user);
 

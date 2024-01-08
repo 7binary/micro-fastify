@@ -14,7 +14,7 @@ const refreshRoute: FastifyPluginCallback = (fastify, opts, done) => {
       throw new NotAuthorizedError();
     }
 
-    const { accessToken, refreshToken } = fastify.auth.generateAuthTokens(user);
+    const { accessToken, refreshToken } = fastify.auth.generateAuthTokens({ id: user.id });
     await fastify.tokenService.saveRefreshToken(user.id, refreshToken);
 
     reply.setCookie('refreshToken', refreshToken).status(200).send({

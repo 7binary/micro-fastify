@@ -26,6 +26,10 @@ module.exports = {
           source: `/api/${service}/:slug`,
           destination: `http://localhost:${port}/api/${service}/:slug`,
         });
+        rewrites.push({
+          source: `/api/${service}`,
+          destination: `http://localhost:${port}/api/${service}`,
+        });
       });
     }
 

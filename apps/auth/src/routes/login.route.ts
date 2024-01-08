@@ -7,7 +7,7 @@ const loginRoute: FastifyPluginCallback = (fastify, opts, done) => {
     schema: { body: LoginDto },
   }, async (request, reply) => {
     const user = await fastify.userService.login(request.body);
-    const { accessToken, refreshToken } = fastify.auth.generateAuthTokens(user);
+    const { accessToken, refreshToken } = fastify.auth.generateAuthTokens({ id: user.id });
     await fastify.tokenService.saveRefreshToken(user.id, refreshToken);
 
     reply.setCookie('refreshToken', refreshToken).status(200).send({

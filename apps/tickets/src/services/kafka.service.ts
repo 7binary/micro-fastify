@@ -1,18 +1,21 @@
 import { FastifyInstance } from 'fastify';
+import { Ticket } from '@prisma/client';
 
 export enum KafkaTopics {
   NEW_TICKET = 'new-ticket',
 }
 
 export class KafkaService {
+  readonly groupId = 'tickets';
 
   constructor(protected readonly fastify: FastifyInstance) {
-    this.newUserConsume();
+    this.newTicketConsume();
   }
 
-  async newUserConsume() {
+  async newTicketConsume() {
     await this.fastify.kafka?.addConsumer({
       topic: KafkaTopics.NEW_TICKET,
+      groupId: this.groupId,
       fromBeginning: true,
       eachMessage: async (message) => {
         const ticket = JSON.parse(message.value?.toString() || '{}');
@@ -20,16 +23,17 @@ export class KafkaService {
           this.fastify.log.info(ticket, '[KAFKA] NEW TICKET =>');
         }
       },
-      onConnect: async () => this.newUserEmit({}),
     });
+    await this.newTicketEmit({});
   }
 
-  async newUserEmit(jsonRecord: Record<string, any>) {
-    await this.fastify.kafka?.producer.send({
+  async newTicketEmit(ticket: Partial<Ticket>) {
+    return this.fastify.kafka?.producer.send({
       topic: KafkaTopics.NEW_TICKET,
       messages: [{
         key: null,
-        value: JSON.stringify(jsonRecord),
+        value: this.fastify.ticketsService.stringify(ticket),
+        // value: JSON.stringify(ticket),
       }],
     });
   }
