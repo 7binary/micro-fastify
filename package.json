@@ -20,8 +20,8 @@
     "skaf:prep": "pnpm k:ing-delete && pnpm k:secrets",
     "skaf:reset": "pnpm skaf:prep && skaffold dev",
     "--- LOCAL ---": "------------------------------------------------------------------",
+    "test": "npm-run-all test:*",
     "dev": "concurrently -c magenta,yellow,cyan,green,blue,red npm:dev:*",
-    "test": "concurrently -c magenta,yellow,cyan,green,blue,red npm:test:*",
     "lint": "concurrently -c magenta,yellow,cyan,green,blue,red npm:lint:*",
     "lint:eslint": "eslint --fix --max-warnings 5 \"apps/**/*.ts\"",
     "prepare": "husky install",
@@ -49,6 +49,7 @@
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-import": "^2.28.1",
     "husky": "^8.0.3",
+    "npm-run-all": "^4.1.5",
     "typescript": "^5.2.2"
   }
 }

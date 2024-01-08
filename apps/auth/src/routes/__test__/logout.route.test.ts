@@ -4,6 +4,8 @@ import { createServer } from '@/create-server';
 test('Logout', async (t) => {
   const app = createServer();
   t.teardown(() => app.close());
+  await app.ready();
+
   const [userEmail, userPw] = ['logout@gmail.com', 'logout@AB234'];
 
   const registerSuccess = await app.inject({

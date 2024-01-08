@@ -4,6 +4,7 @@ import { createServer } from '@/create-server';
 test('Tickets List', async (t) => {
   const app = createServer();
   t.teardown(() => app.close());
+  await app.ready();
 
   const ticketsSuccess = await app.inject({
     method: 'GET',

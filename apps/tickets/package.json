@@ -10,7 +10,7 @@
     "dev": "pnpm i && prisma migrate dev && tsx watch src/index.ts",
     "test": "pnpm test:reset && pnpm test:run",
     "test:reset": "export $(cat .env.test | xargs) && prisma migrate reset --force",
-    "test:run": "export $(cat .env.test | xargs) && tap --reporter=base --disable-coverage --comments src/**/*.test.ts; exit 0",
+    "test:run": "export $(cat .env.test | xargs) && tap --reporter=base --bail --disable-coverage --comments src/**/*.test.ts; exit 0",
     "prisma:add": "prisma migrate dev --name",
     "prisma:dev": "prisma migrate dev",
     "prisma:deploy": "prisma migrate deploy",
