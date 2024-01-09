@@ -12,16 +12,13 @@ import { prismaPlugin } from './plugins/prisma.plugin';
 import { registerServices } from './services';
 
 export const createServer = (): FastifyInstance => {
-  const isTest = env.NODE_ENV === 'test';
-  const isProd = env.NODE_ENV === 'production';
-
   const fastify = Fastify({
     trustProxy: true,
     ajv: {
       customOptions: { allErrors: true },
       plugins: [require('ajv-errors')],
     },
-    logger: isProd ? true : isTest ? false : {
+    logger: env.isProd ? true : env.isTest ? false : {
       transport: {
         target: 'pino-pretty',
         options: {
@@ -33,7 +30,7 @@ export const createServer = (): FastifyInstance => {
     pluginTimeout: 99000,
   }).withTypeProvider<TypeBoxTypeProvider>();
 
-  fastify.register(errorHandlerPlugin, { withLog: true, withStack: !isProd });
+  fastify.register(errorHandlerPlugin, { withLog: true, withStack: !env.isProd });
   fastify.register(rateLimit, { max: 150, timeWindow: '1 minute' });
   fastify.register(helmet);
   fastify.register(authPlugin, {
@@ -42,7 +39,11 @@ export const createServer = (): FastifyInstance => {
     accessTokenLives: env.JWT_LIVES,
   });
   fastify.register(prismaPlugin, { databaseUrl: env.DATABASE_URL, withLog: true });
-  fastify.register(kafkaPlugin, { brokers: env.KAFKA_BROKERS, withLog: true, inactive: isTest });
+  fastify.register(kafkaPlugin, {
+    brokers: env.KAFKA_BROKERS,
+    withLog: true,
+    inactive: env.isTest,
+  });
   fastify.register(cookiePlugin, { secret: env.COOKIE_SECRET, domain: env.COOKIE_DOMAIN });
   fastify.register(registerServices);
   fastify.register(autoload, { dir: join(__dirname, 'routes'), ignorePattern: /.*.test.ts/ });
