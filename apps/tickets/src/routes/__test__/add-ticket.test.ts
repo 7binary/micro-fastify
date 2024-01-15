@@ -1,5 +1,6 @@
 import { test } from 'tap';
 import { createServer } from '@/create-server';
+import { ticketMaxPrice, ticketMinPrice } from '@/dto/ticket.dto';
 
 test('Add Ticket', async (t) => {
   const app = createServer();
@@ -11,12 +12,12 @@ test('Add Ticket', async (t) => {
   const price = 100500.44;
   const ticketData = { title, price };
 
-  const errForbidden = await app.inject({
+  const errUnauthorized = await app.inject({
     method: 'POST',
     path: '/api/tickets',
     body: ticketData,
   });
-  t.equal(errForbidden.statusCode, 401, 'returs 401 if unauthorized');
+  t.equal(errUnauthorized.statusCode, 401, 'returs 401 if unauthorized');
 
   const errNoTitle = await app.inject({
     method: 'POST',
@@ -33,6 +34,22 @@ test('Add Ticket', async (t) => {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
   t.equal(errNoPrice.statusCode, 400, 'returs 400 if no `price` provided');
+
+  const errPriceMin = await app.inject({
+    method: 'POST',
+    path: '/api/tickets',
+    body: { title: 'City lights', price: ticketMinPrice - 1 },
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+  t.equal(errPriceMin.statusCode, 400, 'returs 400 if `price` is too small');
+
+  const errPriceMax = await app.inject({
+    method: 'POST',
+    path: '/api/tickets',
+    body: { title: 'City lights', price: ticketMaxPrice + 1 },
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+  t.equal(errPriceMax.statusCode, 400, 'returs 400 if `price` is too big');
 
   const success = await app.inject({
     method: 'POST',

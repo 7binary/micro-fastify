@@ -1,5 +1,8 @@
 import { Static, Type } from '@sinclair/typebox';
 
+export const ticketMinPrice = 1;
+export const ticketMaxPrice = 1000000;
+
 export const TicketDto = Type.Object({
   title: Type.String({
     minLength: 3,
@@ -10,8 +13,8 @@ export const TicketDto = Type.Object({
     },
   }),
   price: Type.Number({
-    minimum: 1,
-    maximum: 1000000,
+    minimum: ticketMinPrice,
+    maximum: ticketMaxPrice,
     errorMessage: {
       minimum: 'Price must be a number between 1 and 1000000',
       maximum: 'Price must be a number between 1 and 1000000',

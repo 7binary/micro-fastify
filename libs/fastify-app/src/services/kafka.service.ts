@@ -29,7 +29,7 @@ export class KafkaService {
       topic: KafkaTopics.NEW_USER,
       messages: [{
         key: null,
-        value: this.fastify.userService.stringify(userJson),
+        value: JSON.stringify(userJson),
       }],
     });
   }

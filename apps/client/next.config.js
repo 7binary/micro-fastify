@@ -4,6 +4,7 @@ console.log('[CLIENT] ENV =>', JSON.stringify({
   SERVICE_PORTS: process?.env?.SERVICE_PORTS,
 }, null, 2));
 
+/** @type {import('next').NextConfig} */
 module.exports = {
   reactStrictMode: true,
   webpack: (config) => {
@@ -18,6 +19,7 @@ module.exports = {
     const servicePorts = process?.env?.SERVICE_PORTS
       ? process.env.SERVICE_PORTS.split(',')
       : null;
+    const printRewrites = {};
 
     if (Array.isArray(servicePorts) && servicePorts[0] && servicePorts[0].includes(':')) {
       servicePorts.forEach(servicePort => {
@@ -30,10 +32,11 @@ module.exports = {
           source: `/api/${service}`,
           destination: `http://localhost:${port}/api/${service}`,
         });
+        printRewrites[`/api/${service}`] = `http://localhost:${port}/api/${service}`;
       });
     }
 
-    console.log('[CLIENT] REWERITES =>', rewrites);
+    console.log('[CLIENT] REWERITES =>', printRewrites);
 
     return rewrites;
   },

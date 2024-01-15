@@ -14,4 +14,4 @@ declare module 'fastify' {
 export const registerServices = fp(async (fastify: FastifyInstance) => {
   fastify.decorate('ticketsService', new TicketsService(fastify.prisma.ticket));
   fastify.decorate('kafkaService', new KafkaService(fastify));
-}, { dependencies: ['kafka'] });
+}, { dependencies: ['prisma', 'kafka'] });
