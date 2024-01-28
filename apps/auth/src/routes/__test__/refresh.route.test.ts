@@ -32,4 +32,6 @@ test('Refresh', async (t) => {
   t.equal(refreshSuccess.statusCode, 200, 'returns a 200 on success using cookies');
   t.ok(accessToken, 'success returns json {accessToken}');
   t.ok(newRefreshToken, 'success sets a new cookie {refreshToken}');
+
+  t.end();
 });

@@ -39,4 +39,6 @@ test('Login', async (t) => {
   t.equal(loginSuccess.statusCode, 200, 'returns a 200 on success login');
   t.ok(accessToken, 'returns json {accessToken}');
   t.ok(refreshToken, 'sets cookie {refreshToken}');
+
+  t.end();
 });

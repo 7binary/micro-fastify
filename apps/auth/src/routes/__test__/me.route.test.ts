@@ -29,4 +29,6 @@ test('Me', async (t) => {
   });
   t.equal(meSuccess.statusCode, 200, 'returns a 200 on success current user');
   t.ok(meSuccess.json()?.user, 'returns json {user}');
+
+  t.end();
 });

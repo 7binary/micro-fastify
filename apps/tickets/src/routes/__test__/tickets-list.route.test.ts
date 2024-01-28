@@ -12,4 +12,6 @@ test('Tickets List', async (t) => {
   });
   t.equal(ticketsSuccess.statusCode, 200, 'returs a 200 on success');
   t.equal(Array.isArray(ticketsSuccess.json()), true, 'is array');
+
+  t.end();
 });

@@ -28,7 +28,7 @@
     "@fastify/jwt": "7.2.4",
     "@fastify/rate-limit": "9.1.0",
     "@fastify/type-provider-typebox": "4.0.0",
-    "@prisma/client": "5.8.0",
+    "@prisma/client": "5.8.1",
     "@sinclair/typebox": "0.32.4",
     "ajv-errors": "3.0.0",
     "bcryptjs": "2.4.3",
@@ -38,7 +38,7 @@
     "fastify": "4.25.2",
     "fastify-common": "1.17.0",
     "fastify-plugin": "4.5.1",
-    "prisma": "5.8.0"
+    "prisma": "5.8.1"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",

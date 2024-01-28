@@ -8,14 +8,12 @@ test('Add Ticket', async (t) => {
   await app.ready();
 
   const { accessToken } = app.auth.generateAuthTokens({ id: 1 });
-  const title = 'City lights';
-  const price = 100500.44;
-  const ticketData = { title, price };
+  const ticket = { title: 'City lights', price: 100500.44 };
 
   const errUnauthorized = await app.inject({
     method: 'POST',
     path: '/api/tickets',
-    body: ticketData,
+    body: ticket,
   });
   t.equal(errUnauthorized.statusCode, 401, 'returs 401 if unauthorized');
 
@@ -54,10 +52,13 @@ test('Add Ticket', async (t) => {
   const success = await app.inject({
     method: 'POST',
     path: '/api/tickets',
-    body: ticketData,
+    body: ticket,
     headers: { Authorization: `Bearer ${accessToken}` },
   });
   t.equal(success.statusCode, 201, 'returs 201 if ticket is saved');
-  t.equal(success.json()?.title, title);
-  t.equal(+success.json()?.price, +price);
+  const { title, price } = success.json();
+  t.equal(title, ticket.title);
+  t.equal(+price, +ticket.price);
+
+  t.end();
 });

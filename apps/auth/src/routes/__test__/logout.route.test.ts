@@ -24,4 +24,6 @@ test('Logout', async (t) => {
   const refreshToken = logoutSuccess.cookies.find(c => c.name === 'refreshToken')?.value;
   t.equal(logoutSuccess.statusCode, 200, 'returns a 200 on success');
   t.notOk(refreshToken, 'clears the cookie {refreshToken}');
+
+  t.end();
 });

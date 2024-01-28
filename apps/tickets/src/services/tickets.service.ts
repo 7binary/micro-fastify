@@ -2,6 +2,7 @@ import { PrismaClient, Ticket } from '@prisma/client';
 import fastJson from 'fast-json-stringify';
 
 import { TicketDtoType } from '@/dto/ticket.dto';
+import { NotFoundError } from 'fastify-common';
 
 export class TicketsService {
   stringify: (model: Partial<Ticket>) => string;
@@ -41,6 +42,17 @@ export class TicketsService {
         authorUserId: authorUserId,
       },
     });
+
+    return ticket;
+  }
+
+  async getTicketById(id: number) {
+    const ticket = await this.prismaTicket.findFirst({
+      where: { id },
+    });
+    if (!ticket) {
+      throw new NotFoundError('Ticket is not found');
+    }
 
     return ticket;
   }

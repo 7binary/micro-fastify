@@ -35,4 +35,6 @@ test('Register', async (t) => {
     payload: { email: userEmail, password: userPw },
   });
   t.equal(registerDuplicateEmail.statusCode, 400, 'returns a 400 with duplicate email');
+
+  t.end();
 });
