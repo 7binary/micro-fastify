@@ -1,8 +1,8 @@
 import { PrismaClient, Ticket } from '@prisma/client';
 import fastJson from 'fast-json-stringify';
+import { NotFoundError } from 'fastify-common';
 
 import { TicketDtoType } from '@/dto/ticket.dto';
-import { NotFoundError } from 'fastify-common';
 
 export class TicketsService {
   stringify: (model: Partial<Ticket>) => string;

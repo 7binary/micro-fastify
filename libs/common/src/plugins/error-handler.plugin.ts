@@ -1,10 +1,4 @@
-import {
-  FastifyError,
-  FastifyInstance,
-  FastifyReply,
-  FastifyRequest,
-  ValidationResult,
-} from 'fastify';
+import { FastifyError, FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import fp from 'fastify-plugin';
 
 interface ErrorObject {
@@ -46,13 +40,13 @@ export const errorHandlerPlugin = fp((fastify: FastifyInstance, opts: PluginOpti
     };
 
     if (hasValidationErrors) {
-      errorObject.validation = validation.reduce((acc: any, validation: ValidationResult) => {
+      errorObject.validation = validation.reduce((acc, validation) => {
         if (validation.instancePath) {
           const key = validation.instancePath?.replace('/', '');
-          acc[key] = validation.message;
+          acc[key] = validation.message || '';
         }
         return acc;
-      }, {});
+      }, {} as Record<string, string>);
     }
 
     if (opts.withStack && stack) {

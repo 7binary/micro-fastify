@@ -57,8 +57,8 @@ test('Add Ticket', async (t) => {
   });
   t.equal(success.statusCode, 201, 'returs 201 if ticket is saved');
   const { title, price } = success.json();
-  t.equal(title, ticket.title);
-  t.equal(+price, +ticket.price);
+  t.equal(title, ticket.title, 'ticket title match');
+  t.equal(+price, +ticket.price, 'ticket price match');
 
   t.end();
 });
