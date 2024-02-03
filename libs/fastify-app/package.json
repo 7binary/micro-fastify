@@ -32,7 +32,7 @@
     "dotenv": "16.3.1",
     "env-var": "7.4.1",
     "fast-json-stringify": "5.9.2",
-    "fastify": "4.25.2",
+    "fastify": "4.26.0",
     "fastify-common": "1.16.1",
     "fastify-plugin": "4.5.1",
     "prisma": "5.8.0"

@@ -1,6 +1,6 @@
 {
   "name": "fastify-common",
-  "version": "1.18.1",
+  "version": "1.19.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -23,7 +23,7 @@
   "dependencies": {
     "@fastify/error": "^3.4.1",
     "@fastify/jwt": "^7.2.4",
-    "fastify": "^4.25.2",
+    "fastify": "^4.26.0",
     "fastify-plugin": "^4.5.1",
     "kafkajs": "^2.2.4"
   },
