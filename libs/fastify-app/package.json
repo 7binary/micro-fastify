@@ -26,16 +26,16 @@
     "@fastify/helmet": "11.1.1",
     "@fastify/rate-limit": "9.1.0",
     "@fastify/type-provider-typebox": "4.0.0",
-    "@prisma/client": "5.8.0",
+    "@prisma/client": "5.10.2",
     "@sinclair/typebox": "0.32.4",
     "ajv-errors": "3.0.0",
     "dotenv": "16.3.1",
     "env-var": "7.4.1",
     "fast-json-stringify": "5.9.2",
-    "fastify": "4.26.0",
+    "fastify": "4.26.1",
     "fastify-common": "1.16.1",
     "fastify-plugin": "4.5.1",
-    "prisma": "5.8.0"
+    "prisma": "5.10.2"
   },
   "devDependencies": {
     "@types/node": "^20.9.2",

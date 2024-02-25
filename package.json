@@ -2,6 +2,9 @@
   "name": "micro-fastify",
   "version": "1.0.0",
   "description": "",
+  "keywords": [],
+  "author": "Artem Zinovev",
+  "license": "ISC",
   "main": "index.js",
   "scripts": {
     "--- KUBERNETES ---": "-------------------------------------------------------------",
@@ -38,9 +41,6 @@
     "test:tickets": "pnpm -C apps/tickets test",
     "lint:tickets": "tsc -p apps/tickets --noEmit --incremental"
   },
-  "keywords": [],
-  "author": "Artem Zinovev",
-  "license": "ISC",
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^6.7.2",
     "@typescript-eslint/parser": "^6.7.2",

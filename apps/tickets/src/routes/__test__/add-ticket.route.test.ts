@@ -1,6 +1,6 @@
 import { test } from 'tap';
 import { createServer } from '@/create-server';
-import { ticketMaxPrice, ticketMinPrice } from '@/dto/ticket.dto';
+import { TICKET_MIN_PRICE, TICKET_MAX_PRICE } from '@/dto/ticket.dto';
 
 test('Add Ticket', async (t) => {
   const app = createServer();
@@ -36,7 +36,7 @@ test('Add Ticket', async (t) => {
   const errPriceMin = await app.inject({
     method: 'POST',
     path: '/api/tickets',
-    body: { title: 'City lights', price: ticketMinPrice - 1 },
+    body: { title: 'City lights', price: TICKET_MIN_PRICE - 1 },
     headers: { Authorization: `Bearer ${accessToken}` },
   });
   t.equal(errPriceMin.statusCode, 400, 'returs 400 if `price` is too small');
@@ -44,7 +44,7 @@ test('Add Ticket', async (t) => {
   const errPriceMax = await app.inject({
     method: 'POST',
     path: '/api/tickets',
-    body: { title: 'City lights', price: ticketMaxPrice + 1 },
+    body: { title: 'City lights', price: TICKET_MAX_PRICE + 1 },
     headers: { Authorization: `Bearer ${accessToken}` },
   });
   t.equal(errPriceMax.statusCode, 400, 'returs 400 if `price` is too big');

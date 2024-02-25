@@ -7,18 +7,14 @@ test('Tickets List', async (t) => {
   await app.ready();
 
   const { accessToken } = app.auth.generateAuthTokens({ id: 1 });
-  await app.inject({
+  const addTicket = async (title: string, price: number) => app.inject({
     method: 'POST',
     path: '/api/tickets',
-    body: { title: 'First ticket', price: 1 },
+    body: { title, price },
     headers: { Authorization: `Bearer ${accessToken}` },
   });
-  await app.inject({
-    method: 'POST',
-    path: '/api/tickets',
-    body: { title: 'Second ticket', price: 2 },
-    headers: { Authorization: `Bearer ${accessToken}` },
-  });
+  await addTicket('First ticket', 1);
+  await addTicket('Second ticket', 2);
 
   const ticketsSuccess = await app.inject({
     method: 'GET',
