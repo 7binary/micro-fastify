@@ -1,12 +1,12 @@
-import { test } from 'tap';
+import { afterAll, beforeAll, expect, test } from 'vitest';
 import { createServer } from '@/create-server';
 import { TICKET_MIN_PRICE, TICKET_MAX_PRICE } from '@/dto/ticket.dto';
 
-test('Add Ticket', async (t) => {
-  const app = createServer();
-  t.teardown(() => app.close());
-  await app.ready();
+const app = createServer();
+beforeAll(async () => void await app.ready());
+afterAll(async () => void await app.close());
 
+test('Add Ticket', async () => {
   const { accessToken } = app.auth.generateAuthTokens({ id: 1 });
   const ticket = { title: 'City lights', price: 100500.44 };
 
@@ -15,7 +15,7 @@ test('Add Ticket', async (t) => {
     path: '/api/tickets',
     body: ticket,
   });
-  t.equal(errUnauthorized.statusCode, 401, 'returs 401 if unauthorized');
+  expect(errUnauthorized.statusCode).equal(401, 'returs 401 if unauthorized');
 
   const errNoTitle = await app.inject({
     method: 'POST',
@@ -23,7 +23,7 @@ test('Add Ticket', async (t) => {
     body: { title: '', price: 100500 },
     headers: { Authorization: `Bearer ${accessToken}` },
   });
-  t.equal(errNoTitle.statusCode, 400, 'returs 400 if no `title` provided');
+  expect(errNoTitle.statusCode).equal(400, 'returs 400 if no `title` provided');
 
   const errNoPrice = await app.inject({
     method: 'POST',
@@ -31,7 +31,7 @@ test('Add Ticket', async (t) => {
     body: { title: 'City lights', price: undefined },
     headers: { Authorization: `Bearer ${accessToken}` },
   });
-  t.equal(errNoPrice.statusCode, 400, 'returs 400 if no `price` provided');
+  expect(errNoPrice.statusCode).equal(400, 'returs 400 if no `price` provided');
 
   const errPriceMin = await app.inject({
     method: 'POST',
@@ -39,7 +39,7 @@ test('Add Ticket', async (t) => {
     body: { title: 'City lights', price: TICKET_MIN_PRICE - 1 },
     headers: { Authorization: `Bearer ${accessToken}` },
   });
-  t.equal(errPriceMin.statusCode, 400, 'returs 400 if `price` is too small');
+  expect(errPriceMin.statusCode).equal(400, 'returs 400 if `price` is too small');
 
   const errPriceMax = await app.inject({
     method: 'POST',
@@ -47,7 +47,7 @@ test('Add Ticket', async (t) => {
     body: { title: 'City lights', price: TICKET_MAX_PRICE + 1 },
     headers: { Authorization: `Bearer ${accessToken}` },
   });
-  t.equal(errPriceMax.statusCode, 400, 'returs 400 if `price` is too big');
+  expect(errPriceMax.statusCode).equal(400, 'returs 400 if `price` is too big');
 
   const success = await app.inject({
     method: 'POST',
@@ -55,10 +55,8 @@ test('Add Ticket', async (t) => {
     body: ticket,
     headers: { Authorization: `Bearer ${accessToken}` },
   });
-  t.equal(success.statusCode, 201, 'returs 201 if ticket is saved');
+  expect(success.statusCode).equal(201, 'returs 201 if ticket is saved');
   const { title, price } = success.json();
-  t.equal(title, ticket.title, 'ticket title match');
-  t.equal(+price, +ticket.price, 'ticket price match');
-
-  t.end();
+  expect(title).equal(ticket.title, 'ticket title match');
+  expect(+price).equal(+ticket.price, 'ticket price match');
 });

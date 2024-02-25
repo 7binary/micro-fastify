@@ -1,11 +1,11 @@
-import { test } from 'tap';
+import { afterAll, beforeAll, expect, test } from 'vitest';
 import { createServer } from '@/create-server';
 
-test('Refresh', async (t) => {
-  const app = createServer();
-  t.teardown(() => app.close());
-  await app.ready();
+const app = createServer();
+beforeAll(async () => void await app.ready());
+afterAll(async () => void await app.close());
 
+test('Refresh', async () => {
   const [userEmail, userPw] = ['refresh@gmail.com', 'refresh@AB234'];
 
   const registerSuccess = await app.inject({
@@ -13,14 +13,14 @@ test('Refresh', async (t) => {
     url: '/api/auth/register',
     payload: { email: userEmail, password: userPw },
   });
-  t.equal(registerSuccess.statusCode, 201, 'has a registered user');
+  expect(registerSuccess.statusCode).equal(201, 'has a registered user');
   const refreshToken = registerSuccess.cookies.find(c => c.name === 'refreshToken')?.value;
 
   const refreshUnauthorized = await app.inject({
     method: 'GET',
     url: '/api/auth/refresh',
   });
-  t.equal(refreshUnauthorized.statusCode, 401, 'returns a 401 without cookie');
+  expect(refreshUnauthorized.statusCode).equal(401, 'returns a 401 without cookie');
 
   const refreshSuccess = await app.inject({
     method: 'GET',
@@ -29,9 +29,7 @@ test('Refresh', async (t) => {
   });
   const accessToken = refreshSuccess.json()?.accessToken;
   const newRefreshToken = registerSuccess.cookies.find(c => c.name === 'refreshToken')?.value;
-  t.equal(refreshSuccess.statusCode, 200, 'returns a 200 on success using cookies');
-  t.ok(accessToken, 'success returns json {accessToken}');
-  t.ok(newRefreshToken, 'success sets a new cookie {refreshToken}');
-
-  t.end();
+  expect(refreshSuccess.statusCode).equal(200, 'returns a 200 on success using cookies');
+  expect(accessToken, 'success returns json {accessToken}').toBeTruthy();
+  expect(newRefreshToken, 'success sets a new cookie {refreshToken}').toBeTruthy();
 });

@@ -1,12 +1,13 @@
-import { test } from 'tap';
+import { afterAll, beforeAll, expect, test } from 'vitest';
 import { createServer } from '@/create-server';
 
-test('Tickets List', async (t) => {
-  const app = createServer();
-  t.teardown(() => app.close());
-  await app.ready();
+const app = createServer();
+beforeAll(async () => void await app.ready());
+afterAll(async () => void await app.close());
 
+test('Tickets List', async () => {
   const { accessToken } = app.auth.generateAuthTokens({ id: 1 });
+
   const addTicket = async (title: string, price: number) => app.inject({
     method: 'POST',
     path: '/api/tickets',
@@ -20,9 +21,8 @@ test('Tickets List', async (t) => {
     method: 'GET',
     path: '/api/tickets',
   });
-  t.equal(ticketsSuccess.statusCode, 200, 'returs a 200 on success');
+  expect(ticketsSuccess.statusCode).equal(200, 'returs a 200 on success');
   const tickets = ticketsSuccess.json();
-  t.equal(Array.isArray(tickets) && tickets.length >= 2, true, 'tickets is array of 2 records');
-
-  t.end();
+  expect(Array.isArray(tickets) && tickets.length >= 2,
+    'tickets is array of 2 records').toBeTruthy();
 });

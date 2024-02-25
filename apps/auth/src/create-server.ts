@@ -1,7 +1,5 @@
-import { join } from 'path';
 import Fastify, { FastifyInstance } from 'fastify';
 import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
-import autoload from '@fastify/autoload';
 import helmet from '@fastify/helmet';
 import rateLimit from '@fastify/rate-limit';
 import { errorHandlerPlugin, authPlugin, kafkaPlugin } from 'fastify-common';
@@ -10,6 +8,7 @@ import { env } from './env';
 import { cookiePlugin } from './plugins/cookie.plugin';
 import { prismaPlugin } from './plugins/prisma.plugin';
 import { registerServices } from './services';
+import { registerRoutes } from './routes';
 
 export const createServer = (): FastifyInstance => {
   const fastify = Fastify({
@@ -46,7 +45,7 @@ export const createServer = (): FastifyInstance => {
   });
   fastify.register(cookiePlugin, { secret: env.COOKIE_SECRET, domain: env.COOKIE_DOMAIN });
   fastify.register(registerServices);
-  fastify.register(autoload, { dir: join(__dirname, 'routes'), ignorePattern: /.*.test.ts/ });
+  fastify.register(registerRoutes);
 
   return fastify;
 };

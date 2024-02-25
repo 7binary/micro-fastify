@@ -1,10 +1,11 @@
-import { test } from 'tap';
+import { afterAll, beforeAll, expect, test } from 'vitest';
 import { createServer } from '@/create-server';
 
-test('Example', async (t) => {
-  const app = createServer();
-  t.teardown(() => app.close());
+const app = createServer();
+beforeAll(async () => void await app.ready());
+afterAll(async () => void await app.close());
 
+test('Example', async (t) => {
   const [userEmail, userPw] = ['example@gmail.com', 'example@AB234'];
 
   const exampleSuccess = await app.inject({
@@ -12,5 +13,5 @@ test('Example', async (t) => {
     url: '/api/fastify-app/example',
     payload: { email: userEmail, password: userPw },
   });
-  t.equal(exampleSuccess.statusCode, 201, 'has example created');
+  expect(exampleSuccess.statusCode).equal(201, 'has example created');
 });
