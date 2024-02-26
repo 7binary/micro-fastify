@@ -1,8 +1,9 @@
-import { FastifyInstance } from 'fastify';
-import fp from 'fastify-plugin';
+import { FastifyPluginCallback } from 'fastify';
 
 import exampleRoute from './example.route';
 
-export const registerRoutes = fp(async (fastify: FastifyInstance) => {
+export const registerRoutes: FastifyPluginCallback = (fastify, opts, done) => {
   fastify.register(exampleRoute);
-});
+
+  done();
+};
